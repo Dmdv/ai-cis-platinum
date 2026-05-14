@@ -65,7 +65,23 @@ def _atomic_write_text(file_path, content):
     os.replace(temp_path, file_path)
 ```
 
-Every skill write — `create`, `edit`, `patch`, `write_file` — flows through atomic write. After the write, a **security scan** runs (regex-based threat detection across nine security categories per Huang); if the scan blocks the skill, the entire directory is rolled back via `shutil.rmtree`. This matters specifically because several skills (e.g. `cetsa-analysis.SKILL.md`, `xenograft-tumor-burden.SKILL.md`) embed credentials for host-lab LIMS, ELN, and ICP-MS instruments — a malformed credential prompt that bypassed security scanning could leak API keys.
+Every skill write — `create`, `edit`, `patch`, `write_file` — flows through atomic write. After the write, a **security scan** runs across the nine threat categories enumerated below. If the scan flags an issue, the new skill is moved to a **quarantine directory** (`repo/skills/.quarantine/<timestamp>-<skill-name>/`) and a Slack alert pings the platform engineer; the previous version of the skill remains in place and unaffected. This is a softer failure mode than the prior "rollback via `shutil.rmtree`" pattern, which produced false-positive UX disasters on legitimate chemistry skills (chemistry markdown routinely contains numeric ranges like `4–67 °C` that naive regex injection-rules flag as range-injection patterns).
+
+The nine security-scan categories (each with a regex + heuristic check; the platform engineer may extend):
+
+1. Plaintext credentials — API keys, OAuth tokens, AWS access keys, private SSH keys.
+2. Database connection strings — embedded Postgres / Neo4j / Redis URIs with credentials.
+3. Privileged shell invocations — `sudo`, raw firewall calls, set-user-ID flags.
+4. Network egress to disallowed hosts — outbound calls to hosts not in the allowlist (the runner enforces this at runtime, but skills should not even *describe* such calls).
+5. Filesystem escape — paths containing `..`, `/etc/`, `/dev/`, `/proc/` outside the per-skill working directory.
+6. Unsanitised user-input interpolation — string-format / f-string patterns that interpolate user-supplied SMILES or chemist-supplied free text directly into shell commands.
+7. Dangerous Python primitives — dynamic-code-execution builtins (`eval`, `exec`, `compile`, `__import__`) and unsafe deserialisation primitives applied to untrusted input.
+8. Hardcoded PII or pre-publication compound structures — skill body contains literal compound SMILES tagged `release_state: pre-publication`.
+9. Skill-impersonation patterns — a skill that claims to be an MCP server (skills declare *which* MCP tools to call by name; an MCP server publishes the wire contract; the two layers must not be conflated per ADR-007).
+
+Allowlist mechanism: the platform engineer can sign an exception per skill (`allow_categories: [<n>, <m>]` in the skill's frontmatter, plus a PI-signed approval token). Allowlisted skills bypass the corresponding category but log every invocation for audit. This is the right balance for legitimate skills (e.g. a CETSA protocol that *must* contain `aws s3 cp` to upload thermal-shift raw data to the data lake).
+
+Why quarantine, not rmtree: the earlier draft of this ADR used `shutil.rmtree` to roll back any flagged write — a UX disaster on chemistry markdown where false-positive regex hits are common. Quarantine preserves the engineer's work, surfaces the false positive for review, and lets the previous valid skill version stay in production until the new one is cleared.
 
 ### Platform filter
 

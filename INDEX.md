@@ -23,6 +23,8 @@ The written proposal, ordered as it should be read.
 | 10 | [`docs/10_value_proposition.md`](docs/10_value_proposition.md) | 5 min | Skill–component matrix · where the combined background is decisive · adjacent expertise the platform engineer does not claim. |
 | 11 | [`docs/11_references.md`](docs/11_references.md) | reference | ≈ 90 peer-reviewed papers · datasets · agent-framework docs · practitioner-press citations. |
 | 12 | [`docs/12_dual_track_milestones.md`](docs/12_dual_track_milestones.md) | **20 min** | **Dual-track consolidation** · Track A (extend MKANO/MB Finder) + Track B (build next-gen platform) · 43-decision register · phase-by-phase milestones. |
+| 6a | [`docs/06a_slo_register.md`](docs/06a_slo_register.md) | 5 min | SLO register · 99.0 % public-API SLO · error-budget freeze-on-burn · cold-start budgets · alerting routing. |
+| API | [`docs/api_governance.md`](docs/api_governance.md) | 5 min | Public-API governance · semver discipline · deprecation policy · supported runtimes · security-disclosure policy · OpenAPI source-of-truth. |
 
 ---
 
