@@ -1,24 +1,3 @@
----
-marp: true
-theme: default
-size: '16:9'
-paginate: true
-header: 'MB Finder v2 — research architecture'
-footer: 'Rusanov et al., 2026 · ChemRxiv DOI 10.26434/chemrxiv-2025-pp32k/v2'
----
-
-<!--
-MB Finder v2 deck. Pure markdown; reads on GitHub as-is.
-Marp directives are HTML-comment blocks elsewhere in this file
-(GitHub ignores them; Marp CLI uses them for PDF rendering).
-Render with: npm i -g @marp-team/marp-cli && marp presentation.md -o presentation.pdf
--->
-
-<!-- _class: lead -->
-<!-- _paginate: false -->
-<!-- _header: '' -->
-<!-- _footer: '' -->
-
 # MB Finder v2
 
 ### A multi-metal, geometry-aware, agent-orchestrated AI drug-discovery platform
@@ -28,8 +7,6 @@ Render with: npm i -g @marp-team/marp-cli && marp presentation.md -o presentatio
 > **Source paper:** Rusanov et al., 2026 · ChemRxiv DOI [10.26434/chemrxiv-2025-pp32k/v2](https://doi.org/10.26434/chemrxiv-2025-pp32k/v2)
 
 ---
-
-<!-- _class: lead -->
 
 ## What I propose to build
 
@@ -45,9 +22,6 @@ A next-generation AI-driven metallodrug discovery platform that I will deliver e
 **Personal commitment.** I will author the MLOps stack and data architecture end-to-end (~100 %); the chemoinformatic-core sanitization refactor, agentic orchestrator, and equivariant-diffusion generator at ~85–95 % each with chemistry / theoretical-chemistry review.
 
 ---
-
-<!-- _class: accent -->
-<!-- _footer: '' -->
 
 # Part 1 · The opportunity
 
@@ -84,9 +58,6 @@ This architecture **operationalises that roadmap**, generalises beyond Pt, and a
 > **Headline result.** PlatinAI is **16× more potent** than cisplatin in cisplatin-resistant A2780cis ovarian cancer, with a non-DNA mechanism of action.
 
 ---
-
-<!-- _class: accent -->
-<!-- _footer: '' -->
 
 # Part 2 · The four-pillar extension
 
@@ -298,9 +269,6 @@ The architecture commits to **two parallel work tracks** sharing the same infras
 
 ---
 
-<!-- _class: accent -->
-<!-- _footer: '' -->
-
 # Part 3 · Why this profile
 
 A single researcher with **combined AI, backend, and chemistry-engineering** expertise is uniquely positioned.
@@ -366,9 +334,6 @@ Three concrete projects I propose to deliver in Phase 1 (months 0–6). Each is 
 Any of the three can serve as the first concrete deliverable in the first quarter — they are independently falsifiable proof-of-fit projects.
 
 ---
-
-<!-- _class: lead -->
-<!-- _footer: '' -->
 
 # References
 
