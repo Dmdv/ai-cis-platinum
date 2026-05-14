@@ -1,10 +1,3 @@
-<!--
-Marp slide deck — MB Finder v2: A Multi-Metal AI-Driven Drug Discovery System
-
-To render: `marp presentation.md -o presentation.pdf` (install Marp CLI first: `npm i -g @marp-team/marp-cli`)
-Or view live with the VSCode Marp extension.
--->
-
 ---
 marp: true
 theme: default
@@ -18,6 +11,14 @@ style: |
   table { font-size: 80%; }
   code { font-size: 90%; }
 ---
+
+<!--
+Marp slide deck — MB Finder v2: A Multi-Metal AI-Driven Metallodrug Discovery System.
+
+To render: `marp presentation.md -o presentation.pdf`
+(install Marp CLI first: `npm i -g @marp-team/marp-cli`)
+Or view live with the VSCode Marp extension.
+-->
 
 <!-- _class: lead -->
 
