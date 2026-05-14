@@ -173,6 +173,8 @@ The current de novo pipeline reassembles 20 most-frequent ligands combinatoriall
 
 ### Approach
 
+**Generative-track strategy: JT-VAE as Phase-2 primary; equivariant diffusion as Phase-3 conditional.** The proposal commits to **JT-VAE (Strandgaard / Balcells, *JACS Au* 2025) as the Phase-2 primary generative track** — it is wet-lab-validated, has working open-source code (Component 1.4.1), uses an encoder/decoder + junction-tree formulation that enforces chemical validity by construction, and trains tractably on the 17,732-IC50 + 214 K-unlabelled Pt corpus. **Equivariant diffusion (END, Cornet et al. 2024) is a Phase-3 conditional benchmark, not a Phase-2 default.** Joshi's *Equivariance is dead, long live equivariance?* (Substack, June 2025) explicitly argues diffusion-generation is moving away from equivariance toward scaling on large data; equivariant networks are "orders of magnitude slower" to train than standard Transformers, and the Pt corpus is small. Phase 3 runs END head-to-head against JT-VAE on identical conditioning objectives (cell-line activity × COL3A1 affinity) and **retires the loser** based on a measurable gate (see Component 1.4.2 below).
+
 **Chemistry context — what makes organometallic generation different from organic.** Generic 3D-molecule diffusion (EDM, MiDi, GeoLDM) is trained on covalent organic graphs; transition-metal complexes break four standard assumptions: (i) dative bonds replace single bonds at the metal centre and require explicit edge tokens; (ii) coordination number is constrained per oxidation state (Pt(II) = 4, Pt(IV) = 6, Au(III) = 4, Re(I) ≈ 6 with fac-tricarbonyl); (iii) trans-influence and cis-trans isomerism determine activity; (iv) Lipinski's Rule of Five — designed for orally bioavailable organic small molecules in 1997 — is largely irrelevant for cytotoxic Pt/Au i.v. metallodrugs. The source paper itself uses *modified* Lipinski thresholds (atom count 20–70, molar refractivity 40–130) tuned to the metallodrug class. Any generative architecture proposed here must encode these constraints, not assume them.
 
 - **Equivariant Neural Diffusion (END; Cornet et al., NeurIPS 2024)** on the NatQG representation. END improves on EDM/MiDi with a learnable, rigid-equivariant forward process and reports state-of-the-art on QM9 and GEOM-DRUGS. Operating on the (node, edge, 3D-coordinate, metal-token, oxidation-state) tuple natively respects the geometric constraints listed above.
@@ -229,6 +231,18 @@ target spec (cell line activity + protein target embedding + drug-likeness)
 - Generate 1,000 novel candidates conditioned on COL3A1 + A2780cis activity.
 - Evaluate against fragment-assembly baseline on: chemical validity rate, synthesis-feasibility score (Retrosynthesis API), predicted activity rate.
 - Synthesise top 5; benchmark experimentally.
+
+### Component 1.4.2 — Phase-3 generator retirement gate (decision criterion)
+
+Carrying three generative tracks (fragment assembly + JT-VAE + equivariant diffusion) indefinitely multiplies maintenance and evaluation cost. The proposal commits to a **measurable Phase-3 retirement criterion**:
+
+| Track | Retired if … |
+|---|---|
+| **JT-VAE** | (a) Chemical-validity rate on κ² Pt complexes < 70 % after the Phase-2 retraining lands, OR (b) IC50-rank-recall of top-5 predicted candidates is worse than the fragment-assembly baseline by ≥ 10 percentage points on the 19 PlatinAI-era complexes. |
+| **Equivariant diffusion (END)** | (a) Training stability fails on the 17,732 IC50 + 214 K Pt corpus (training diverges or recovery requires more than 2 attempts with adjusted LR), OR (b) After head-to-head Phase-3 benchmark, chemical-validity × novelty × IC50-rank-recall is ≥ 5 percentage points worse than JT-VAE, OR (c) Wall-clock training cost per generated candidate exceeds JT-VAE's by ≥ 3×. |
+| **Fragment assembly** | Retired only if BOTH JT-VAE and equivariant diffusion exceed it on chemical-validity × synthesisability × IC50-rank-recall by ≥ 5 percentage points — chemists trust the fragment baseline; it stays as the floor. |
+
+If any retirement criterion fires, the proposal closes that generator's pipeline and reallocates the maintenance budget to the surviving tracks. The gate evaluation is itself a milestone (Phase 3, month 15) in `docs/12_dual_track_milestones.md`.
 
 ## Technology choices
 

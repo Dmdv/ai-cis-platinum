@@ -60,7 +60,14 @@ Every artefact in this tuple is content-addressable; combined, they form a falsi
   - Real-time single-molecule predictions (web UI → REST API → KServe or vLLM).
   - Batch predictions (queued, asynchronous, results materialised to data lake).
   - Internal microservice calls from the orchestrator (gRPC for latency, MCP for tool exposure).
-- **Scaling:** horizontal autoscaling on GPU node pools; scale to zero overnight; cold-start mitigated by a warm pool of 1 GPU.
+- **Scaling — per-tier policy.** Different components have different always-on vs scale-to-zero profiles:
+
+  | Component | Policy | Why |
+  | --- | --- | --- |
+  | Agentic orchestrator (LangGraph process) | **Always-on** (small CPU pod; ≈ $10 / mo) | A DMTA campaign spans weeks; the orchestrator must react to wet-lab events (assay results arriving, ELN updates) at any hour — including overnight. Always-on cost is negligible vs the latency cost of cold-starting the campaign loop. |
+  | Tier 1 (small classifiers) and Tier 3 (AF3 / Boltz-2 batch) | **Scale-to-zero** with cold-start mitigated by a warm pool of 1 GPU | Stateless small models and batch workloads cold-start cheaply (sub-30 s). Warm pool absorbs morning rush. |
+  | Tier 2 — Llama 3 70B (Supervisor orchestrator) | **Explicit choice: 24×7 OR scale-to-zero with budgeted cold-start.** Default Phase-1 = scale-to-zero with documented cold-start SLO ≤ 180 s. The 24×7 alternative is ≈ $1,500–2,150 / mo (Lambda H100 reserved vs on-demand). | A 70B AWQ-loaded weight loads in 60-180 s on H100; that latency is bounded and acceptable for non-interactive Supervisor decisions. Interactive web-UI chat traffic, if introduced, may require the 24×7 alternative. |
+- **Cold-start SLO budget.** Each tier ships with an explicit cold-start budget recorded in the SLO register (`docs/06a_slo_register.md`, Phase 1 deliverable).
 - **Model rollout:** canary deployment — 5 % of traffic routed to a new model version while production sees the prior version; automated rollback on metric regression.
 
 ### Component 4.2.1 — Inference serving stack and quantisation (the modern serving picture)

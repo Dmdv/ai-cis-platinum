@@ -139,8 +139,8 @@ Phase 1 Track B: 7 wks Must (≈27 % of 26-wk capacity). Phase 1 Tracks A+B Must
 | ID | Pri | Milestone | Effort | Success criterion |
 |---|---|---|---|---|
 | B2.1 | S | ChemFM-LoRA fine-tune on Pt corpus (QLoRA + DoRA via Unsloth) | 6 wks | Benchmarked vs MKANO+ on identical splits |
-| B2.2 | **M** | **`tmcinvdes` fork: JT-VAE training on lab's Pt corpus** | 8 wks | First Pt JT-VAE generates ≥ 70 % valid κ² complexes |
-| B2.3 | X | Equivariant diffusion generator (END / MACE backbone) — *parallel track to B2.2; pick one for Phase 2* | 8 wks | Diversity benchmark on 1K generated candidates |
+| B2.2 | **M** | **`tmcinvdes` fork: JT-VAE training on lab's Pt corpus** *(Phase-2 primary generative track)* | 8 wks | First Pt JT-VAE generates ≥ 70 % valid κ² complexes |
+| B2.3 | X | Equivariant diffusion generator (END / MACE backbone) — *deferred to Phase-3 conditional benchmark per Pillar 1 §1.4.2 retirement gate; NOT a parallel Phase-2 track* | 8 wks (Phase 3) | Diversity benchmark on 1K generated candidates IF retirement gate is reached |
 | B2.4 | **M** | Synthesis + Assay agents wired to ELN / LIMS | 4 wks | First chemist-approved synthesis kicked off via agentic-orchestrator |
 | B2.5 | **M** | First end-to-end DMTA campaign (real lab project: Au(III) hit-to-lead) | 8 wks (wet-lab gated) | Inter-step latency ≤ days; wet-lab clocks retained |
 | B2.6 | S | Contextual retrieval + GraphRAG over ElementKG+ | 6 wks | 49 %+ retrieval-failure-rate reduction per Anthropic benchmark |
@@ -229,7 +229,7 @@ The architectural commitments the proposal commits to. The platform engineer ref
 | D-09 | Q-GaLore for domain-adaptive continued pretraining (DAPT) on 214 K Pt corpus | ADR-009 |
 | D-10 | LoReFT for task-specific heads (geometry, isomer, target) | ADR-009 |
 | D-11 | RLVR with GRPO (not RLHF / PPO) for Phase-3 Supervisor post-training | ADR-009 |
-| D-12 | Equivariance for property prediction; benchmark scaled-transformer diffusion in Phase 3 | Pillar 1.4 |
+| D-12 | Equivariance for property prediction; JT-VAE is the Phase-2 primary generative track; equivariant diffusion is a Phase-3 conditional benchmark with explicit retirement criteria | Pillar 1.4 |
 | D-13 | JT-VAE (Strandgaard/Balcells) as complementary track to equivariant diffusion | Pillar 1.4.1 |
 | D-14 | NatQG geometry representation; tmQM + tmQMg* pretraining | Pillar 1.1 |
 | D-15 | `pydentate` (Kulik) as upstream denticity predictor — pip-installable | Pillar 1.1 |

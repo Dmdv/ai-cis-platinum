@@ -16,13 +16,17 @@
 
 ## Decision
 
-Adopt a three-tier serving stack:
+Adopt a three-tier serving stack with **phased rollout** to keep Phase-1 operational surface small:
 
-| Tier | Workloads | Serving stack |
-|---|---|---|
-| Tier 1 — small models | MKANO+ GNN classifier, geometry heads, per-metal heads | **KServe** (CNCF-incubating, K8s-native), PyTorch runtime, FP16. Sub-50 ms p95. |
-| Tier 2 — LLMs and foundation models | ChemFM-LoRA scorer, Llama 3 70B (orchestrator), Qwen 2.5 32B (design), ChemDFM-13B (analysis) | **vLLM v1** + **AWQ** 4-bit + **FlashAttention-3**, multi-tenant via Triton when concurrency >10. **Speculative decoding (EAGLE/BaldEagle): SGLang**. 100–500 ms TTFT. |
-| Tier 3 — structure prediction | AF3, Boltz-2, RoseTTAFold-AA | Custom containers with FA3, batch queue via NATS, results to data lake. Long-running, not interactive. |
+| Tier | Workloads | Phase-1 stack (minimum operational) | Phase-2 / Phase-3 graduations (gated) |
+|---|---|---|---|
+| Tier 1 — small models | MKANO+ GNN classifier, geometry heads, per-metal heads | **KServe** (CNCF-incubating, K8s-native), PyTorch runtime, FP16. Sub-50 ms p95. | — (already simple) |
+| Tier 2 — LLMs and foundation models | ChemFM-LoRA scorer, Llama 3 70B (orchestrator), Qwen 2.5 32B (design), ChemDFM-13B (analysis) | **vLLM v1** + **AWQ** 4-bit + **FlashAttention-3** behind KServe (single-tenant). 100–500 ms TTFT. | (a) **NVIDIA Triton + vLLM backend** for multi-tenant when ≥ 10 sustained concurrent campaigns. (b) **SGLang + EAGLE / BaldEagle speculative decoding** when measured TTFT shortfall on the Supervisor workload exceeds the SLO budget. (c) **Disaggregated prefill / decode (NVIDIA Dynamo or llm-d)** at ≥ 30 sustained concurrent users. |
+| Tier 3 — structure prediction | AF3, Boltz-2, RoseTTAFold-AA | Custom containers with FA3, batch queue via NATS, results to data lake. Long-running, not interactive. | — (already batch) |
+
+**Phase-1 operational surface = KServe + vLLM v1 + a custom AF3 batch wrapper.** SGLang, Triton multi-tenant, llm-d, and disaggregation are deferred to Phase 2 / Phase 3 and activated only against the **quantitative triggers** in the table above — not on a calendar date. The earlier draft of this ADR specified all of these as Phase-1 stack components; the architecture critic review correctly flagged that as over-engineering for a single-engineer / ≤ 30-concurrent-user academic-lab system.
+
+**Known-good fallback image.** The Phase-1 vLLM v1 image is paired with a pinned **vLLM v0 fallback image** in the container registry. The runtime cost of carrying the v0 image is zero (it is referenced only when needed); the optionality is real — older Ampere SKUs occasionally underperform on v1, and the v0 fallback removes a cliff-edge risk for the lab's pre-Hopper hardware.
 
 ## Rationale
 
@@ -45,9 +49,10 @@ Adopt a three-tier serving stack:
 
 ## Consequences
 
-- Three sets of operational runbooks instead of one.
-- The platform engineer must maintain familiarity with vLLM, KServe, and the custom AF3/Boltz-2 wrappers.
+- **Phase-1 operational footprint is two runbooks** (KServe + vLLM, custom AF3 batch). Triton multi-tenant, SGLang spec-decoding, and disaggregation add runbooks only when their quantitative triggers fire.
+- The platform engineer must maintain familiarity with vLLM, KServe, and the custom AF3/Boltz-2 wrappers from Phase 1; SGLang / Triton operational expertise is acquired on demand.
 - Cost monitoring becomes per-tier; observability dashboards reflect the split.
+- A pinned vLLM v0 image stays in the registry as fallback (zero recurring cost; insurance against Ampere v1 regressions).
 
 ## Alternatives considered
 

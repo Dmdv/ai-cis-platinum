@@ -42,13 +42,15 @@ Domain-specialised models sometimes outperform much larger generalist ones on na
 - LoRA-adapter fine-tuning keeps GPU cost manageable; if ChemFM does not deliver, the experiment is cheap to retire.
 - Ensemble approach can extract the best of both.
 
-### R4 — Equivariant-diffusion generator produces unsynthesisable molecules
-Generative models can sample chemically valid-on-paper structures that are synthetically inaccessible.
+### R4 — Equivariant-diffusion stability and synthesisability on the small Pt corpus
+Equivariant diffusion is an under-tested choice for a 17,732-labelled-IC50 + 214 K-unlabelled Pt corpus. Joshi (*Equivariance is dead, long live equivariance?*, Substack June 2025) explicitly argues that diffusion-generation is moving away from equivariance toward scaling; equivariant networks are "orders of magnitude slower" to train than standard Transformers, and the Pt corpus is small by foundation-model standards. The training-stability risk on the specialised Pt corpus is real, and even valid samples may be synthetically inaccessible.
 
 **Mitigation:**
+- **JT-VAE (Strandgaard / Balcells *JACS Au* 2025) is the Phase-2 primary generative track**, not equivariant diffusion. JT-VAE has working open-source code, a published wet-lab-validated precedent on transition-metal ligands, and the junction-tree formulation enforces chemical validity by construction.
+- Equivariant diffusion is downgraded to a **Phase-3 conditional benchmark** with explicit retirement criteria (Pillar 1 Component 1.4.2): if training stability fails, or if Phase-3 head-to-head benchmark shows ≥ 5-point worse chemical-validity × novelty × IC50-rank-recall vs JT-VAE, or if wall-clock cost ≥ 3× JT-VAE, the diffusion track is retired.
 - All sampled candidates pass through the chemoinformatic core's drug-likeness and synthesis-feasibility filters before being shown to a chemist.
 - Retrosynthesis analysis (AiZynthFinder + IBM RXN) is a required step before any candidate is nominated for synthesis.
-- The generator is *hybrid* with fragment assembly: fragment-based candidates retain known synthesisability while diffusion supplies novelty.
+- The generator stack remains *hybrid* with fragment assembly: fragment-based candidates retain known synthesisability while the chosen ML generator (JT-VAE primary, diffusion conditional) supplies novelty.
 
 ### R5 — Agent hallucination
 LLM agents may propose incorrect or unsafe chemistry.
