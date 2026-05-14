@@ -129,6 +129,16 @@ ENTITY: Experiment / Campaign        (Pillar 3 orchestrator state)
 - Backward-incompatible changes require a deprecation window (one minor release).
 - New columns default to nullable; legacy rows backfilled lazily.
 
+**Lazy backfill policy (explicit).** Every silver-tier row carries an integer `schema_version` field. When a column is added or a transformation changes, the bronze-to-silver materialisation logic emits new rows at the new `schema_version`; **legacy rows are NOT updated on read**. Backfill is performed by an explicit **Prefect job** (`schema_migration_v{N}_to_v{N+1}`) that:
+
+1. Streams rows at `schema_version = N` in batches.
+2. Applies the migration transformation.
+3. Writes the result at `schema_version = N+1` (preserving the original row via a soft-delete `is_current` flag for auditability).
+4. Records progress in MLflow (run name = `schema_migration_v{N}_v{N+1}_yyyymmdd`).
+5. Stops on first error; never partial-completes silently.
+
+The Prefect job is run by the platform engineer (or co-PI per R20) on-demand when a schema bump is published. Reading code MUST handle both `schema_version` values during the migration window; deprecation of the old version follows the api-governance policy (≥ 2 minor SDK releases or 6 months whichever longer).
+
 ## Identifier strategy
 
 Every entity carries an external identifier (Cellosaurus, UniProt, ChEMBL, etc.) **and** an internal MB Finder identifier. The internal identifier is durable across upstream renamings and database reorgs.
