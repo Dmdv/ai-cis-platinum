@@ -4,7 +4,11 @@ Strategy protocol for transition-metal sanitization.
 Each metal centre receives a concrete strategy implementing the five-step
 metal-extended sanitization documented in Rusanov, Babak, Balcells et al.
 (ChemRxiv 2026, DOI 10.26434/chemrxiv-2025-pp32k/v2). The protocol below
-captures the procedure shape; concrete strategies live in the same package.
+captures the procedure shape; concrete strategies live in the same package
+and self-register via the :func:`register_sanitizer` decorator (see
+``strategies/__init__.py``) so the registry stays open for extension and
+closed for modification — no edits to ``__init__.py`` are required to add
+a new metal.
 
 Steps (paraphrased from the paper):
     1. strip_charges          — remove SMILES charges before fingerprinting
@@ -19,9 +23,12 @@ strategy by writing one file. Reviewers see chemistry, not boilerplate.
 
 from __future__ import annotations
 
-from typing import Protocol, Literal, runtime_checkable
+from typing import TYPE_CHECKING, Literal, Protocol, runtime_checkable
 
 from rdkit import Chem
+
+if TYPE_CHECKING:
+    from ..schemas import SanitizedComplex
 
 Geometry = Literal[
     "square_planar",
@@ -37,13 +44,18 @@ Geometry = Literal[
 
 @runtime_checkable
 class MetalSanitizer(Protocol):
-    """A sanitization strategy for one transition metal element."""
+    """A sanitization strategy for one transition metal element.
 
-    metal_symbol: str                 # e.g. "Pt"
-    typical_oxidation_states: list[int]
-    typical_coordination_numbers: list[int]
-    typical_geometries: list[Geometry]
-    active_threshold_uM: float        # IC50 cutoff defining "active" for this metal
+    Class attributes are immutable tuples / frozensets to prevent accidental
+    cross-instance mutation. Concrete strategies should declare them as
+    class-level ``tuple[…]`` constants and mark the class ``@final``.
+    """
+
+    metal_symbol: str                          # e.g. "Pt"
+    typical_oxidation_states: tuple[int, ...]
+    typical_coordination_numbers: tuple[int, ...]
+    typical_geometries: tuple[Geometry, ...]
+    active_threshold_uM: float                 # IC50 cutoff defining "active" for this metal
 
     def strip_charges(self, mol: Chem.Mol) -> Chem.Mol:
         """Step 1 — remove charges before RDKit fingerprint generation."""
@@ -65,10 +77,6 @@ class MetalSanitizer(Protocol):
         """Step 5 — adjust the metal-centre formal charge to balance the complex."""
         ...
 
-    def sanitize(self, smiles: str) -> "SanitizedComplex":
+    def sanitize(self, smiles: str) -> SanitizedComplex:
         """Run all five steps end-to-end, return a sanitized graph + metadata."""
         ...
-
-
-# Imports placed at the bottom to avoid cycles in the skeleton.
-from schemas import SanitizedComplex  # noqa: E402

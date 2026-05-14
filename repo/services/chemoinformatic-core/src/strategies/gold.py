@@ -17,17 +17,24 @@ This file is currently a stub; the platform engineer authors the rules
 in Phase 1 with chemistry review by the host-lab chemistry team.
 """
 
+from __future__ import annotations
+
+from typing import final
+
 from rdkit import Chem
 
-from .base import Geometry, MetalSanitizer
-from schemas import SanitizedComplex
+from ..schemas import SanitizedComplex
+from .base import Geometry
+from . import register_sanitizer
 
 
+@final
+@register_sanitizer("Au")
 class GoldSanitizer:
     metal_symbol: str = "Au"
-    typical_oxidation_states: list[int] = [1, 3]
-    typical_coordination_numbers: list[int] = [2, 4]
-    typical_geometries: list[Geometry] = ["linear", "square_planar"]
+    typical_oxidation_states: tuple[int, ...] = (1, 3)
+    typical_coordination_numbers: tuple[int, ...] = (2, 4)
+    typical_geometries: tuple[Geometry, ...] = ("linear", "square_planar")
     active_threshold_uM: float = 1.0  # gold drugs typically more potent than platinum
 
     def strip_charges(self, mol: Chem.Mol) -> Chem.Mol:
@@ -49,6 +56,3 @@ class GoldSanitizer:
 
     def sanitize(self, smiles: str) -> SanitizedComplex:
         raise NotImplementedError("skeleton")
-
-
-_INSTANCE: MetalSanitizer = GoldSanitizer()

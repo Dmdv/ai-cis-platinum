@@ -11,17 +11,24 @@ This file is currently a stub; the platform engineer ports the logic in
 Phase 1 milestone 3 (see ../../../docs/08_implementation_roadmap.md).
 """
 
+from __future__ import annotations
+
+from typing import final
+
 from rdkit import Chem
 
-from .base import Geometry, MetalSanitizer
-from schemas import SanitizedComplex
+from ..schemas import SanitizedComplex
+from .base import Geometry
+from . import register_sanitizer
 
 
+@final
+@register_sanitizer("Pt")
 class PlatinumSanitizer:
     metal_symbol: str = "Pt"
-    typical_oxidation_states: list[int] = [2, 4]
-    typical_coordination_numbers: list[int] = [4, 6]
-    typical_geometries: list[Geometry] = ["square_planar", "octahedral"]
+    typical_oxidation_states: tuple[int, ...] = (2, 4)
+    typical_coordination_numbers: tuple[int, ...] = (4, 6)
+    typical_geometries: tuple[Geometry, ...] = ("square_planar", "octahedral")
     active_threshold_uM: float = 5.0  # paper's published cutoff
 
     def strip_charges(self, mol: Chem.Mol) -> Chem.Mol:
@@ -48,7 +55,3 @@ class PlatinumSanitizer:
     def sanitize(self, smiles: str) -> SanitizedComplex:
         # Pipeline: parse → strip → dative → valence → heteroatom → balance → graph
         raise NotImplementedError("skeleton")
-
-
-# Self-check: this concrete class satisfies the MetalSanitizer protocol.
-_INSTANCE: MetalSanitizer = PlatinumSanitizer()
