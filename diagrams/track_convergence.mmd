@@ -1,0 +1,51 @@
+%% Track convergence — sequence diagram showing how Track A and Track B share infrastructure
+%% Render: mmdc -i track_convergence.mmd -o track_convergence.png
+
+sequenceDiagram
+    autonumber
+    participant Eng as Platform Engineer
+    participant Shared as Shared Infrastructure
+    participant TrackA as Track A — Extend MKANO
+    participant TrackB as Track B — Next-Gen
+    participant Lab as Host-Lab Chemists
+    participant World as External (preprints, marketplace)
+
+    Note over Eng,World: PHASE 1 — months 0-6 (Track A weight 50% / Track B 20% / Shared 25%)
+
+    Eng->>Shared: Build chemoinformatic-core (multi-metal sanitization)
+    Eng->>Shared: Stand up MLOps + Postgres + MLflow
+    Eng->>Shared: Deploy vLLM + AWQ + Triton pool
+    Shared-->>TrackA: Sanitization API ready
+    Shared-->>TrackB: Inference pool ready
+    Eng->>TrackA: Reproduce MKANO; add Au/Cu strategies
+    Eng->>TrackA: pip install pydentate; wire upstream
+    Eng->>TrackB: Skeleton LangGraph (Supervisor + Design only)
+    TrackA->>Lab: MB Finder v2 alpha for dogfooding
+    TrackA->>World: Preprint - Reproducing MKANO + Au/Cu
+
+    Note over Eng,World: PHASE 2 — months 6-12 (Track A 35% / Track B 40% / Shared 15%)
+
+    Eng->>TrackA: Geometry-aware MKANO+ training
+    Eng->>TrackB: Fork tmcinvdes (Strandgaard et al., 2025); JT-VAE on Pt corpus
+    Eng->>Shared: AF3 / Boltz-2 receptor service
+    Shared-->>TrackA: Target-aware scoring
+    Shared-->>TrackB: Conditioning for generative
+    Eng->>TrackB: Wire Synthesis + Assay to ELN/LIMS
+    TrackB->>Lab: First DMTA campaign (Au(III) hit-to-lead)
+    Lab-->>TrackB: Chemist approval at each step
+    TrackA->>World: Preprint - Geometry-aware MKANO+
+    TrackB->>World: Preprint - Agentic DMTA for metallodrugs
+
+    Note over Eng,World: PHASE 3 — months 12-18 (Track A 20% / Track B 60% / Shared 10%)
+
+    Eng->>TrackA: Pd sanitization; MB Finder v2 GA
+    Eng->>TrackB: RLVR + GRPO Supervisor post-training
+    Eng->>TrackB: Equivariant diffusion + JT-VAE benchmark
+    TrackB->>Lab: Diffusion-generated candidate for synthesis
+    Lab-->>TrackB: Wet-lab validation (synthesis + cell-line assay)
+    TrackB-->>World: First diffusion-generated active metallodrug
+    Eng->>World: Skills marketplace public release
+    Eng->>World: Metallodrug-specific NNP benchmark suite released
+    TrackA->>World: Open-data multi-metal corpus release (CC-BY-4.0)
+
+    Note over Eng,World: Both tracks ship; shared infra served both; the host lab has near-term wins AND long-term moat

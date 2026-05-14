@@ -1,0 +1,93 @@
+version: "3.9"
+
+# Local development orchestration for MB Finder v2 skeleton.
+# Brings up infrastructure dependencies + stubs of every microservice.
+# Real services do nothing scientific yet — only health-check endpoints.
+
+services:
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: mbfinder
+      POSTGRES_USER: mbfinder
+      POSTGRES_PASSWORD: dev-password-only
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    ports: ["5432:5432"]
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    volumes:
+      - redis-data:/data
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: mbfinder
+      MINIO_ROOT_PASSWORD: dev-password-only
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # console
+    volumes:
+      - minio-data:/data
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.13.0
+    command:
+      - mlflow
+      - server
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - postgresql://mbfinder:dev-password-only@postgres:5432/mbfinder
+      - --default-artifact-root
+      - s3://mlflow/
+    environment:
+      AWS_ACCESS_KEY_ID: mbfinder
+      AWS_SECRET_ACCESS_KEY: dev-password-only
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+    ports: ["5000:5000"]
+    depends_on:
+      - postgres
+      - minio
+
+  chemoinformatic-core:
+    build: ./services/chemoinformatic-core
+    ports: ["8001:8000"]
+    depends_on: [postgres, redis]
+    environment:
+      DATABASE_URL: postgresql://mbfinder:dev-password-only@postgres:5432/mbfinder
+
+  inference-api:
+    build: ./services/inference-api
+    ports: ["8002:8000"]
+    depends_on: [chemoinformatic-core, redis, mlflow]
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      CHEMOINFORMATIC_URL: http://chemoinformatic-core:8000
+
+  ingestion:
+    build: ./services/ingestion
+    ports: ["8003:8000"]
+    depends_on: [postgres, minio]
+
+  agentic-orchestrator:
+    build: ./services/agentic-orchestrator
+    ports: ["8004:8000"]
+    depends_on: [postgres, redis, inference-api]
+
+  web-ui:
+    build: ./services/web-ui
+    ports: ["3000:3000"]
+    depends_on: [inference-api, agentic-orchestrator]
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:

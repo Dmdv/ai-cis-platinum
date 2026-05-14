@@ -1,0 +1,43 @@
+%% Example DMTA campaign timeline — worked example from Pillar 3 doc.
+%% Objective: "Find an Au(III) candidate active against A2780cis with predicted COL3A1
+%% engagement and a synthesis route under 6 steps."
+
+sequenceDiagram
+    autonumber
+    actor Chemist
+    participant Supervisor as Supervisor agent
+    participant Design as Design agent
+    participant Synthesis as Synthesis agent
+    participant Assay as Assay agent
+    participant Analysis as Analysis agent
+    participant Tools as inference-api / chemoinformatic-core / retrosynth / ELN / LIMS
+
+    Chemist->>Supervisor: objective + budget + timeframe
+    Supervisor->>Design: plan candidate-design phase
+    Design->>Tools: generate 20 Au(III) candidates (diffusion + fragment)
+    Design->>Tools: rank with target-conditioned MKANO+ (COL3A1)
+    Design-->>Supervisor: ranked list of 20
+    Supervisor->>Synthesis: retrosynth top 5
+    Synthesis->>Tools: AiZynthFinder + IBM RXN
+    Synthesis-->>Supervisor: 5 routes with step counts
+    Supervisor->>Chemist: Gantt + top-2 candidates for approval
+    Chemist-->>Supervisor: approve cand A + cand B
+
+    Synthesis->>Tools: register ELN tasks
+    Note over Synthesis,Chemist: chemist executes synthesis manually,<br/>marks ELN entries complete
+
+    Supervisor->>Assay: schedule MTT (A2780, A2780cis), 72h, n=4
+    Assay->>Tools: LIMS reservations + power calc
+    Note over Assay,Chemist: wet-lab assays performed,<br/>raw data uploaded
+
+    Tools-->>Assay: assay results
+    Assay-->>Supervisor: cand A is active in A2780cis (IC50 ~2 µM)
+
+    Supervisor->>Analysis: launch MoA inference on cand A
+    Analysis->>Tools: RNA-seq + proteomic correlation + KEGG
+    Analysis-->>Supervisor: candidate target list:<br/>COL3A1 (high), BUB1B (mod), PLK1 (low)
+
+    Supervisor->>Chemist: result summary + draft figure
+    Chemist->>Supervisor: approve manuscript-draft step
+    Supervisor->>Analysis: produce draft results section
+    Analysis-->>Chemist: draft manuscript + figure exports

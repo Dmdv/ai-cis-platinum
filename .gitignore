@@ -1,0 +1,34 @@
+# Local agent / preparation artefacts — excluded from the public repo
+research-notes/
+.session/
+
+# macOS / IDE noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Python build artefacts (in case repo/ skeleton is later run)
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Node / web-ui build artefacts
+node_modules/
+.next/
+.turbo/
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+
+# Rendered diagram outputs (regenerate from .mmd sources)
+diagrams/*.png
+diagrams/*.svg

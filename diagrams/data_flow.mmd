@@ -1,0 +1,102 @@
+%% End-to-end data flow: literature → candidate dossier.
+
+flowchart TB
+
+    subgraph sources ["External + lab sources"]
+        lit["literature<br/>(PubMed / ChemRxiv)"]
+        db["public DBs<br/>(ChEMBL / PubChem / CSD / MetAP)"]
+        eln["lab ELN entries"]
+        omics["RNA-seq / proteomics<br/>(GEO / PRIDE)"]
+    end
+
+    subgraph ingest ["ingestion service"]
+        scrape["literature scraper<br/>+ OCR (MolScribe)"]
+        deltapull["delta-pull jobs"]
+        webhook["ELN webhook"]
+        omicsdl["multi-omics downloader"]
+    end
+
+    lit --> scrape
+    db --> deltapull
+    eln --> webhook
+    omics --> omicsdl
+
+    bronze[("Bronze tier<br/>raw + immutable")]
+    scrape --> bronze
+    deltapull --> bronze
+    webhook --> bronze
+    omicsdl --> bronze
+
+    subgraph chem ["chemoinformatic-core"]
+        sanit["metal-extended<br/>sanitization"]
+        geom["NatQG geometry"]
+        novelty["novelty + dedup<br/>(InChIKey)"]
+    end
+
+    bronze --> sanit --> geom --> novelty
+
+    silver[("Silver tier<br/>canonical PostgreSQL")]
+    novelty --> silver
+
+    subgraph feat ["feature engineering"]
+        embed["NatQG / ChemFM embeddings"]
+        kgctx["ElementKG+ context"]
+        splits["train / val / test splits<br/>(random / scaffold / cluster)"]
+    end
+
+    silver --> embed --> splits
+    silver --> kgctx --> splits
+
+    gold[("Gold tier<br/>feature store (Feast)")]
+    splits --> gold
+
+    subgraph train ["model-training"]
+        mkano["MKANO+"]
+        chemfm["ChemFM-LoRA"]
+        diff["equivariant diffusion"]
+        moa["MoA models"]
+    end
+
+    gold --> mkano
+    gold --> chemfm
+    gold --> diff
+    gold --> moa
+
+    mlflow["MLflow registry"]
+    mkano --> mlflow
+    chemfm --> mlflow
+    diff --> mlflow
+    moa --> mlflow
+
+    subgraph serve ["inference-api"]
+        ensemble["calibrated ensemble"]
+        targetaware["target-aware<br/>scoring (AF3/Boltz-2)"]
+    end
+
+    mlflow --> ensemble
+    mlflow --> targetaware
+
+    subgraph orch_box ["agentic-orchestrator"]
+        designloop["DMTA loop<br/>(Supervisor + 5 specialists + audit)"]
+    end
+
+    ensemble --> designloop
+    targetaware --> designloop
+    silver -.->|read context| designloop
+
+    chemist(["Chemist"])
+    designloop --> chemist
+
+    publicapi[/"public REST + GraphQL API"/]
+    silver --> publicapi
+    ensemble --> publicapi
+
+    classDef src fill:#fff3cd,stroke:#856404
+    classDef proc fill:#d1ecf1,stroke:#0c5460
+    classDef store fill:#f8d7da,stroke:#721c24
+    classDef out fill:#d4edda,stroke:#155724
+
+    class lit,db,eln,omics src
+    class scrape,deltapull,webhook,omicsdl,sanit,geom,novelty,embed,kgctx,splits,mkano,chemfm,diff,moa,ensemble,targetaware,designloop proc
+    class bronze,silver,gold,mlflow store
+    class chemist,publicapi out

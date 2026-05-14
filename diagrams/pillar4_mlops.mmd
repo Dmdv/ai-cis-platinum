@@ -1,0 +1,77 @@
+%% Pillar 4 — MLOps and backend infrastructure.
+
+flowchart LR
+
+    subgraph dev ["Developer workflow"]
+        commit["Git commit<br/>(trunk-based PR)"]
+        pr["Pull request"]
+    end
+
+    commit --> pr
+
+    subgraph ci ["CI (GitHub Actions)"]
+        lint["lint<br/>(ruff, mypy, biome)"]
+        test["unit + integration tests"]
+        build["container build<br/>+ SBOM + sign (cosign)"]
+        scan["vuln scan (Trivy)"]
+        intg["ephemeral K8s smoke"]
+    end
+
+    pr --> lint --> test --> build --> scan --> intg
+
+    subgraph cd ["CD (ArgoCD GitOps)"]
+        staging["staging cluster"]
+        prod["production cluster"]
+    end
+
+    intg --> staging
+    staging -->|canary 5%| prod
+
+    subgraph registry ["MLflow registry"]
+        none["None"]
+        stage["Staging"]
+        prodm["Production"]
+        archived["Archived"]
+    end
+
+    none --> stage --> prodm
+    prodm -.-> archived
+
+    subgraph obs ["Observability"]
+        metrics["Prometheus"]
+        logs["Loki"]
+        traces["Tempo"]
+        dash["Grafana"]
+    end
+
+    prod --> metrics
+    prod --> logs
+    prod --> traces
+    metrics --> dash
+    logs --> dash
+    traces --> dash
+
+    subgraph data ["Data tiers"]
+        bronze[("Bronze<br/>raw immutable")]
+        silver[("Silver<br/>canonical PostgreSQL")]
+        gold[("Gold<br/>feature store /<br/>training datasets")]
+    end
+
+    bronze --> silver --> gold
+    gold --> stage
+
+    backup[("Backups +<br/>cross-region replication")]
+    silver -.->|continuous WAL| backup
+    bronze -.->|nightly snapshot| backup
+
+    classDef ci fill:#d4edda,stroke:#155724
+    classDef cd fill:#d1ecf1,stroke:#0c5460
+    classDef reg fill:#e2d6f3,stroke:#5a3686
+    classDef obs fill:#fff3cd,stroke:#856404
+    classDef data fill:#f8d7da,stroke:#721c24
+
+    class commit,pr,lint,test,build,scan,intg ci
+    class staging,prod cd
+    class none,stage,prodm,archived reg
+    class metrics,logs,traces,dash obs
+    class bronze,silver,gold,backup data

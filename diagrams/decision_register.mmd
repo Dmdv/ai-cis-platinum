@@ -1,0 +1,54 @@
+%% Decision register mindmap — 43 architectural commitments
+%% Render: mmdc -i decision_register.mmd -o decision_register.png
+
+mindmap
+  root((MB Finder v2<br/>43 decisions))
+    Architecture
+      D-01 Microservices
+      D-02 PostgreSQL + RDKit + pgvector
+      D-03 Neo4j Phase 1-2 then pg-graph
+      D-04 MLflow registry
+      D-05 Medallion data architecture
+    AI / Modelling
+      D-06 MKANO primary + ChemFM secondary
+      D-07 DoRA bf16 / LoftQ 4-bit
+      D-08 use_rslora=True always
+      D-09 Q-GaLore DAPT
+      D-10 LoReFT for heads
+      D-11 RLVR + GRPO not RLHF/PPO
+      D-12 Equivariance for property prediction
+      D-13 JT-VAE complementary to diffusion
+      D-14 NatQG + tmQM pretraining
+      D-15 pydentate upstream pip-install
+    Inference
+      D-16 Three-tier serving
+      D-17 AWQ default 4-bit
+      D-18 vLLM v0 REMOVED v1 only
+      D-19 SGLang for speculative
+      D-20 FA3 Hopper FA4 Blackwell
+      D-21 Prefill/decode disaggregation Phase 3
+      D-22 Boltz-2 ranking only
+      D-23 RoseTTAFold-AA open alternative
+    Agents
+      D-24 LangGraph orchestrator
+      D-25 Supervisor + 5 specialists
+      D-26 OriGene biology precedent
+      D-27 MCP USB-C tool surface
+      D-28 Code execution with MCP 98.7%
+      D-29 Hybrid LangGraph + Skills
+      D-30 ADR-011 skill curation
+      D-31 DSPy measurable agents
+      D-32 Cooperative not autonomous
+      D-33 Level 2 to Level 3 ladder
+      D-34 Four-layer memory model
+    Validation + Retrieval
+      D-35 Contextual Retrieval 35/49/67%
+      D-36 BGE-M3 hybrid retrieval
+      D-37 GraphRAG over ElementKG+
+      D-38 ColPali multi-modal
+      D-39 Authorship-stratified split
+      D-40 Per-category NNP benchmarks
+    Deployment
+      D-41 Regional data-protection self-host
+      D-42 Apple Silicon M4 Max for chemists
+      D-43 ScienceData-as-a-Service archetype

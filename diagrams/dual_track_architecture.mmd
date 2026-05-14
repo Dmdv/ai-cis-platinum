@@ -1,0 +1,98 @@
+%% Dual-track architecture overlay — shared infrastructure feeds both tracks
+%% Render: mmdc -i dual_track_architecture.mmd -o dual_track_architecture.png
+
+flowchart TB
+
+    subgraph trackA ["TRACK A — Extend MKANO / MB Finder<br/>(near-term scientific results)"]
+        a1[Reproduce MKANO]
+        a2[Multi-metal sanitization<br/>Pt+Au+Cu+Re+Ru+Pd]
+        a3[Geometry-aware MKANO+<br/>cis/trans head]
+        a4[Multi-omics MoA<br/>PlatinAI replay + ICD/tubulin]
+        a5[MB Finder v2 alpha+GA<br/>public platform]
+        a6[Cross-project KG]
+    end
+
+    subgraph trackB ["TRACK B — Next-Gen Platform<br/>(long-term competitive moat)"]
+        b1[ChemFM-LoRA<br/>foundation backbone]
+        b2[JT-VAE generative<br/>tmcinvdes fork]
+        b3[Equivariant diffusion<br/>END / MACE backbone]
+        b4[Agentic DMTA<br/>Supervisor + 5 specialists · LangGraph · MCP · Skills]
+        b5[RLVR + GRPO<br/>Supervisor post-training]
+        b6[Skills marketplace<br/>public release]
+    end
+
+    subgraph shared ["SHARED INFRASTRUCTURE (both tracks)"]
+        s1[Metal-extended chemoinformatic-core<br/>+ pydentate upstream]
+        s2[PostgreSQL + RDKit cartridge + pgvector]
+        s3[MLflow model registry + DVC]
+        s4[vLLM v1 + AWQ + Triton inference pool]
+        s5[MCP server surface]
+        s6[KServe + K8s + CI/CD + observability]
+        s7[ElementKG+ knowledge graph]
+        s8[Skill library ADR-011]
+        s9[Multi-omics MoA pipeline]
+    end
+
+    subgraph wet ["WET-LAB INTERFACE (chemist-driven)"]
+        w1[ELN / LIMS<br/>Benchling / LabArchives]
+        w2[ICP-MS / NMR / HPLC<br/>plate readers]
+        w3[Chemist sign-off gates]
+    end
+
+    %% Shared feeds both tracks
+    s1 --> a1
+    s1 --> a2
+    s1 --> a3
+    s1 --> b2
+    s1 --> b3
+
+    s2 --> a1
+    s2 --> a4
+    s2 --> a5
+    s2 --> b4
+
+    s3 --> a1
+    s3 --> a3
+    s3 --> b1
+    s3 --> b2
+    s3 --> b3
+    s3 --> b5
+
+    s4 --> b1
+    s4 --> b4
+    s4 --> b5
+
+    s5 --> a5
+    s5 --> b4
+    s5 --> b6
+
+    s6 --> a5
+    s6 --> b4
+
+    s7 --> a6
+    s7 --> b4
+
+    s8 --> b4
+    s8 --> b6
+
+    s9 --> a4
+    s9 --> b4
+
+    %% Wet-lab interfaces
+    w1 --> b4
+    w2 --> a4
+    w2 --> b4
+    b4 -.->|approval gate| w3
+    w3 -.->|approves| w2
+
+    %% External code dependencies (public GitHub repositories cited in docs/11_references.md)
+    classDef extDep fill:#fff3cd,stroke:#856404,stroke-width:2px
+    classDef trackANode fill:#d1ecf1,stroke:#0c5460
+    classDef trackBNode fill:#e2d6f3,stroke:#5a3686
+    classDef sharedNode fill:#d4edda,stroke:#155724
+    classDef wetNode fill:#f8d7da,stroke:#721c24
+
+    class a1,a2,a3,a4,a5,a6 trackANode
+    class b1,b2,b3,b4,b5,b6 trackBNode
+    class s1,s2,s3,s4,s5,s6,s7,s8,s9 sharedNode
+    class w1,w2,w3 wetNode

@@ -1,0 +1,81 @@
+%% Pillar 2 — Multi-metal generalisation and adjacent-science integration.
+
+flowchart LR
+
+    input[["raw SMILES /<br/>structure"]]
+
+    subgraph strategy ["Strategy-pattern sanitization"]
+        detect["metal auto-detection"]
+        pt["PtSanitizer<br/>(paper-defined)"]
+        au["AuSanitizer<br/>(I, III, linear + sq-planar)"]
+        cu["CuSanitizer<br/>(I, II)"]
+        re["ReSanitizer<br/>(fac-Re(CO)3)"]
+        ru["RuSanitizer<br/>(II, III)"]
+        pd["PdSanitizer<br/>(II)"]
+        gen["GenericTransitionMetal<br/>(fallback + tracking)"]
+    end
+
+    input --> detect
+    detect -->|Pt| pt
+    detect -->|Au| au
+    detect -->|Cu| cu
+    detect -->|Re| re
+    detect -->|Ru| ru
+    detect -->|Pd| pd
+    detect -->|other| gen
+
+    pt --> san[/"sanitized graph +<br/>NatQG geometry"/]
+    au --> san
+    cu --> san
+    re --> san
+    ru --> san
+    pd --> san
+    gen --> san
+
+    subgraph mkano ["Multi-metal MKANO+"]
+        backbone["shared SE(3)-<br/>equivariant backbone"]
+        token["metal-token<br/>embedding"]
+        heads["per-metal × cell-line heads"]
+    end
+
+    san --> backbone
+    detect --> token
+    backbone --> heads
+    token --> heads
+
+    subgraph moa ["Multi-omics MoA inference"]
+        rnaseq["RNA-seq"]
+        proteo["proteomics"]
+        cetsa["CETSA / DARTS"]
+        kegg["KEGG / Reactome"]
+        rank["target ranking<br/>(KG-augmented)"]
+    end
+
+    rnaseq --> rank
+    proteo --> rank
+    cetsa --> rank
+    kegg --> rank
+    heads --> rank
+
+    subgraph kg ["ElementKG+ (Pillar 2)"]
+        elements["periodic table"]
+        compounds["lab compound portfolio<br/>(Pt + Au + Cu + Re + ICD + tubulin + microbiome)"]
+        proteins["UniProt + AlphaFold"]
+        pathways["pathways + diseases"]
+    end
+
+    rank <--> kg
+    heads <--> kg
+
+    out[/"candidate dossier:<br/>activity + MoA + cross-project context"/]
+    rank --> out
+
+    classDef in fill:#fff3cd,stroke:#856404
+    classDef proc fill:#d1ecf1,stroke:#0c5460
+    classDef kg fill:#e2d6f3,stroke:#5a3686
+    classDef out fill:#f8d7da,stroke:#721c24
+
+    class input in
+    class detect,pt,au,cu,re,ru,pd,gen,san,backbone,token,heads,rnaseq,proteo,cetsa,kegg,rank proc
+    class elements,compounds,proteins,pathways kg
+    class out out

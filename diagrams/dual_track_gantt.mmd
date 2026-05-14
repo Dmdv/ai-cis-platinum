@@ -1,0 +1,59 @@
+%% Dual-Track Milestones — 18-month Gantt
+%% Track A = extend MKANO/MB Finder; Track B = next-gen platform
+%% Render: mmdc -i dual_track_gantt.mmd -o dual_track_gantt.png
+
+gantt
+    title MB Finder v2 — Dual-Track 18-Month Milestones
+    dateFormat  YYYY-MM-DD
+    excludes weekends
+
+    section Phase 1 — Foundations
+    A1.1 Reproduce MKANO end-to-end           :a11, 2026-06-01, 28d
+    A1.2 Strategy-pattern sanitization        :a12, after a11, 21d
+    A1.3 Au sanitization strategy             :a13, after a12, 21d
+    A1.4 Cu sanitization strategy             :a14, 2026-08-01, 14d
+    A1.5 pydentate integration                :a15, 2026-07-15, 7d
+    A1.6 MB Finder v2 alpha deployed          :a16, 2026-08-15, 28d
+    A1.7 Multi-omics MoA replay PlatinAI      :a17, 2026-09-15, 21d
+
+    B1.1 MLOps stack stood up                 :b11, 2026-06-01, 28d
+    B1.2 vLLM v1 + AWQ + Triton pool          :b12, after b11, 21d
+    B1.3 MCP chemoinformatic-core             :b13, after b12, 14d
+    B1.4 MCP inference-api                    :b14, after b13, 14d
+    B1.5 LangGraph skeleton Sup+Design        :b15, 2026-09-15, 28d
+    B1.6 Initial Skills library 9 files       :b16, 2026-10-01, 21d
+
+    section Phase 2 — Modernisation
+    A2.1 Geometry-aware MKANO+ cis/trans      :a21, 2026-12-01, 42d
+    A2.2 tmQM + tmQMg* pretraining            :a22, 2027-01-15, 28d
+    A2.3 Re and Ru sanitization               :a23, 2027-02-01, 28d
+    A2.4 AF3 / Boltz-2 receptor service       :a24, 2027-02-15, 28d
+    A2.5 Metal-aware re-docking               :a25, 2027-03-15, 28d
+    A2.6 Multi-omics on ICD and tubulin       :a26, 2027-04-15, 28d
+
+    B2.1 ChemFM-LoRA Pt fine-tune             :b21, 2026-12-01, 42d
+    B2.2 tmcinvdes fork JT-VAE on Pt          :b22, 2027-01-15, 56d
+    B2.3 Equivariant diffusion generator      :b23, 2027-02-15, 56d
+    B2.4 Synthesis+Assay agents ELN/LIMS      :b24, 2027-03-15, 28d
+    B2.5 First wet-lab DMTA Au(III)           :b25, 2027-04-01, 56d
+    B2.6 Contextual retrieval + GraphRAG      :b26, 2027-04-15, 42d
+    B2.7 DSPy compile Design + Analysis       :b27, 2027-05-15, 21d
+
+    section Phase 3 — Generative + Scale
+    A3.1 Pd sanitization + multi-metal MKANO+ :a31, 2027-06-01, 28d
+    A3.2 MB Finder v2 public GA               :a32, 2027-07-15, 42d
+    A3.3 Cross-project KG live                :a33, 2027-08-15, 42d
+    A3.4 Open-data multi-metal release        :a34, 2027-10-01, 14d
+
+    B3.1 RLVR + GRPO Supervisor post-training :b31, 2027-06-01, 56d
+    B3.2 Diffusion-generated active candidate :b32, 2027-07-01, 84d
+    B3.3 Multi-modal retrieval ColPali        :b33, 2027-08-01, 28d
+    B3.4 Skills marketplace public            :b34, 2027-09-01, 42d
+    B3.5 NNP benchmark suite published        :b35, 2027-09-15, 42d
+    B3.6 Public API SDKs Python+JS            :b36, 2027-10-15, 28d
+
+    section Publications
+    Preprint  Reproducing MKANO + Au/Cu       :p1, 2026-09-15, 14d, milestone
+    Preprint  Geometry-aware MKANO+           :p2, 2027-04-15, 14d, milestone
+    Preprint  Agentic DMTA for metallodrugs   :p3, 2027-07-15, 14d, milestone
+    Preprint  Diffusion-generated metallodrug :p4, 2027-11-15, 14d, milestone

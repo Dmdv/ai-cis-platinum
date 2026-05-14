@@ -1,0 +1,67 @@
+%% Pillar 3 — Agentic DMTA orchestration.
+
+flowchart TB
+
+    chemist(["Chemist<br/>(approves every wet-lab step)"])
+
+    subgraph orchestrator ["agentic-orchestrator (LangGraph state machine)"]
+        sup["Supervisor agent<br/>(plans, budgets, arbitrates)"]
+        design["Design agent<br/>(nominates candidates)"]
+        synth["Synthesis agent<br/>(plans routes)"]
+        assay["Assay agent<br/>(in vitro / in vivo)"]
+        analysis["Analysis agent<br/>(MoA inference)"]
+        report["Report agent<br/>(figures + manuscript)"]
+    end
+
+    chemist -->|objective| sup
+    sup --> design
+    sup --> synth
+    sup --> assay
+    sup --> analysis
+    sup --> report
+
+    sup -->|Gantt plan| chemist
+    synth -->|synthesis tasks| chemist
+    assay -->|in-vivo approval| chemist
+    analysis -->|MoA dossier| chemist
+    report -->|manuscript draft| chemist
+
+    subgraph tools ["Tool surface (every call audited, risk-tagged)"]
+        chemtool["chemoinformatic-core<br/>(Pillar 2)"]
+        inftool["inference-api<br/>(Pillar 1)"]
+        retro["retrosynthesis<br/>(AiZynthFinder + IBM RXN)"]
+        kgtool["ElementKG+"]
+        eln["ELN<br/>(Benchling / LabArchives)"]
+        lims["LIMS<br/>(internal or built-in)"]
+        moatool["multi-omics MoA"]
+        rendertool["figure rendering /<br/>manuscript drafting"]
+    end
+
+    design --> chemtool
+    design --> inftool
+    design --> kgtool
+    synth --> retro
+    synth --> eln
+    assay --> lims
+    assay --> kgtool
+    analysis --> moatool
+    analysis --> kgtool
+    report --> rendertool
+
+    persist[("PostgreSQL<br/>checkpoint + audit log")]
+    sup -.->|every transition| persist
+    design -.-> persist
+    synth -.-> persist
+    assay -.-> persist
+    analysis -.-> persist
+    report -.-> persist
+
+    classDef chemist fill:#fff3cd,stroke:#856404
+    classDef agent fill:#d1ecf1,stroke:#0c5460
+    classDef tool fill:#d4edda,stroke:#155724
+    classDef store fill:#f8d7da,stroke:#721c24
+
+    class chemist chemist
+    class sup,design,synth,assay,analysis,report agent
+    class chemtool,inftool,retro,kgtool,eln,lims,moatool,rendertool tool
+    class persist store

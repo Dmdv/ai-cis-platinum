@@ -1,0 +1,17 @@
+[project]
+name = "mbfinder-chemoinformatic-core"
+version = "0.1.0-skeleton"
+description = "Metal-extended chemoinformatic core for MB Finder v2"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "rdkit>=2024.3.1",
+    "numpy>=1.26",
+    "structlog>=24.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.3", "mypy>=1.9"]

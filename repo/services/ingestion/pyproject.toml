@@ -1,0 +1,18 @@
+[project]
+name = "mbfinder-ingestion"
+version = "0.1.0-skeleton"
+description = "Data ingestion pipelines for MB Finder v2"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "prefect>=2.16",
+    "great-expectations>=0.18",
+    "httpx>=0.27",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.1",
+    "boto3>=1.34",
+    "structlog>=24.1",
+]

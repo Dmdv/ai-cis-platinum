@@ -1,0 +1,53 @@
+%% MB Finder v2 — C4 Context diagram
+%% System boundary, primary users, and external dependencies.
+%% Render with: mmdc -i c4_context.mmd -o c4_context.png
+
+flowchart TB
+
+    %% Users
+    chemist["Lab Chemist"]
+    pi["Principal Investigator"]
+    public["External researcher /<br/>open-access user"]
+
+    %% System boundary
+    subgraph mbfinder_v2 ["MB Finder v2 (this proposal)"]
+        web["Web UI"]
+        api["REST + GraphQL API"]
+        infer["Inference engine"]
+        orch["Agentic orchestrator"]
+    end
+
+    %% External services
+    chembl["ChEMBL / PubChem /<br/>DrugBank / CSD"]
+    af3["AlphaFold 3 /<br/>Boltz-2"]
+    eln["ELN<br/>(Benchling / LabArchives)"]
+    llm["LLM provider<br/>(OpenAI / Anthropic /<br/>self-hosted Llama)"]
+    chemfm["ChemFM /<br/>Hugging Face Hub"]
+    tmqm["tmQM / tmQMg*<br/>(Kneiding et al., 2023)"]
+    geo["GEO / ProteomeXchange<br/>(multi-omics)"]
+
+    %% Interactions
+    chemist -->|browses, runs campaigns,<br/>approves wet-lab steps| web
+    pi -->|monitors, approves model rollouts| web
+    public -->|searches database, runs predictions| api
+
+    web --> api
+    api --> infer
+    api --> orch
+
+    infer -.->|structure prediction| af3
+    infer -.->|foundation backbone| chemfm
+    orch -.->|natural-language reasoning| llm
+    orch -.->|ELN tasks + reads| eln
+
+    api -.->|nightly delta| chembl
+    api -.->|geometry pretraining| tmqm
+    api -.->|multi-omics ingestion| geo
+
+    classDef user fill:#fff3cd,stroke:#856404,color:#000
+    classDef external fill:#e2e3e5,stroke:#383d41,color:#000
+    classDef internal fill:#d1ecf1,stroke:#0c5460,color:#000
+
+    class chemist,pi,public user
+    class chembl,af3,eln,llm,chemfm,tmqm,geo external
+    class web,api,infer,orch internal

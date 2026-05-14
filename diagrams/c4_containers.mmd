@@ -1,0 +1,63 @@
+%% MB Finder v2 — C4 Container diagram
+%% Service-level decomposition within the system boundary.
+
+flowchart LR
+
+    user(["Chemist / Researcher"])
+
+    subgraph platform ["MB Finder v2 platform"]
+        webui["web-ui<br/>(Next.js + RDKit-JS)"]
+        gateway["API Gateway<br/>(NGINX Ingress)"]
+        chem["chemoinformatic-core<br/>(metal-extended RDKit + NatQG)"]
+        infer["inference-api<br/>(FastAPI + TorchServe)"]
+        ingest["ingestion<br/>(Prefect DAGs)"]
+        train["model-training<br/>(PyTorch Lightning)"]
+        orch["agentic-orchestrator<br/>(LangGraph)"]
+        report["reporting<br/>(figure + manuscript drafts)"]
+    end
+
+    subgraph shared ["Shared platform"]
+        pg[(PostgreSQL<br/>+ RDKit cartridge<br/>+ pgvector)]
+        obj[("Object store<br/>S3 / MinIO")]
+        redis[("Redis cache")]
+        bus[["NATS / Kafka"]]
+        mlflow["MLflow registry"]
+        kg[(Neo4j<br/>ElementKG+)]
+    end
+
+    user --> webui --> gateway
+    gateway --> infer
+    gateway --> orch
+
+    infer --> chem
+    infer --> mlflow
+    infer --> redis
+    orch --> infer
+    orch --> chem
+    orch --> kg
+    orch --> pg
+
+    ingest --> obj
+    ingest --> pg
+    ingest --> bus
+
+    train --> obj
+    train --> mlflow
+    train --> pg
+
+    report --> pg
+    report --> obj
+
+    chem --> pg
+    chem --> redis
+
+    bus -.->|events| orch
+    bus -.->|events| train
+
+    classDef svc fill:#d1ecf1,stroke:#0c5460
+    classDef store fill:#f8d7da,stroke:#721c24
+    classDef bus fill:#fff3cd,stroke:#856404
+
+    class webui,chem,infer,ingest,train,orch,report,gateway svc
+    class pg,obj,redis,mlflow,kg store
+    class bus bus

@@ -1,0 +1,70 @@
+%% Pillar 1 — AI modernisation
+%% Geometry-aware, target-aware, foundation-model-backed, generative-augmented.
+
+flowchart TB
+
+    smiles[["candidate SMILES /<br/>3D coordinates"]]
+
+    subgraph chem ["chemoinformatic-core (Pillar 2)"]
+        sanit["Metal-extended<br/>sanitization"]
+        graph["Molecular graph"]
+        natqg["NatQG geometry<br/>(tmQM-pretrained estimator)"]
+    end
+
+    smiles --> sanit --> graph --> natqg
+
+    subgraph encoders ["Encoders (ensemble)"]
+        mkano["MKANO+<br/>(geometry-aware<br/>SE(3)-equivariant GNN)"]
+        chemfm["ChemFM-LoRA<br/>(foundation backbone,<br/>fine-tuned on Pt corpus)"]
+    end
+
+    natqg --> mkano
+    natqg --> chemfm
+
+    subgraph af3svc ["AF3 / Boltz-2 service"]
+        af3["protein-complex<br/>structure prediction"]
+        pocket["binding pocket<br/>features"]
+    end
+
+    target[["protein target sequence<br/>(COL3A1 / BUB1B / ...)"]] --> af3 --> pocket
+
+    subgraph heads ["Output heads"]
+        cls["cell-line classifier<br/>(active / inactive)"]
+        reg["IC50 regressor"]
+        geom["cis/trans /<br/>fac/mer head"]
+        engage["target-engagement<br/>score"]
+    end
+
+    mkano --> heads
+    chemfm --> heads
+    pocket --> engage
+
+    ensemble["calibrated<br/>ensemble<br/>(MKANO+ ⊕ ChemFM-LoRA)"]
+    cls --> ensemble
+    reg --> ensemble
+    engage --> ensemble
+
+    subgraph generative ["Generative augmentation (Phase 3)"]
+        frag["fragment-assembly<br/>(incumbent)"]
+        diff["equivariant diffusion<br/>(new)"]
+        hybrid["hybrid candidate set"]
+    end
+
+    target -.->|conditioning| diff
+    pocket -.->|conditioning| diff
+    frag --> hybrid
+    diff --> hybrid
+    hybrid -->|re-score via ensemble| ensemble
+
+    out[/"ranked candidates<br/>with rationale +<br/>geometry + targets"/]
+    ensemble --> out
+
+    classDef in fill:#fff3cd,stroke:#856404
+    classDef proc fill:#d1ecf1,stroke:#0c5460
+    classDef ens fill:#d4edda,stroke:#155724
+    classDef out fill:#f8d7da,stroke:#721c24
+
+    class smiles,target in
+    class sanit,graph,natqg,mkano,chemfm,af3,pocket,cls,reg,geom,engage,frag,diff,hybrid proc
+    class ensemble ens
+    class out out
