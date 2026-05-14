@@ -101,7 +101,7 @@ The broader metallodrug publication record spans cisplatin resistance, microbiom
   - Proteins and pathways (UniProt, Reactome, KEGG).
   - Phenotypes (Disease Ontology, MeSH).
   - Host-lab internal experiments (linked back to ELN entries).
-- **Storage:** PostgreSQL with `pg_graph` or Neo4j (decision in `repo/adrs/ADR-005-knowledge-graph-store.md`).
+- **Storage:** Neo4j Community Edition through Phases 1–3; Apache AGE evaluated in Phase 3 against measurable performance + coverage gates (decision in `repo/adrs/ADR-005-knowledge-graph-store.md`).
 - **Update cadence:** nightly ingestion from external sources; real-time updates from host-lab experiments via the orchestrator (Pillar 3).
 - **Query surface:** Cypher / SPARQL / a GraphQL wrapper for the web UI.
 
@@ -129,7 +129,7 @@ These queries are currently expressible only as a senior chemist's accumulated m
 | Sanitization base | RDKit (current dependency) | No reason to rewrite; maintain compatibility with MKANO codebase. |
 | Strategy pattern | Plain Python protocols | Keeps each metal's logic readable to chemists. |
 | Multi-omics framework | scverse stack (anndata, scanpy, muon) + DESeq2 / limma / MSstats | Industry standard for biomedical multi-omics. |
-| Knowledge graph | Neo4j (initial) with option to migrate to PG + pg_graph | Faster developer iteration; can move to Postgres if licensing matters. |
+| Knowledge graph | Neo4j Community Edition; Apache AGE evaluated in Phase 3 with measurable gates | Cypher productivity in Phases 1–3; AGE migration only if traversal + coverage + cost gates pass. |
 | External data sync | Airflow / Prefect | Standard DAG-based ETL scheduling. |
 
 ## Risks and unknowns

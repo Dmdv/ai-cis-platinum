@@ -216,7 +216,7 @@ The architectural commitments the proposal commits to. The platform engineer ref
 |---|---|---|
 | D-01 | Polyglot microservices (not monolith) | ADR-001 |
 | D-02 | PostgreSQL + RDKit cartridge + pgvector | ADR-002 |
-| D-03 | Knowledge graph in Neo4j initially; migrate to pg-graph in Phase 3 | ADR-005 |
+| D-03 | Knowledge graph on Neo4j Community Edition; Apache AGE evaluated in Phase 3 against measurable gates | ADR-005 |
 | D-04 | MLflow as model registry + experiment tracker | ADR-006 |
 | D-05 | Medallion architecture (Bronze/Silver/Gold) | Pillar 4 / Pillar 7 |
 
