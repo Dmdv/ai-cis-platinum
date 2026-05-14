@@ -1,21 +1,17 @@
 ---
 marp: true
 theme: default
-size: 16:9
+size: '16:9'
 paginate: true
 header: 'MB Finder v2 — research architecture'
 footer: 'Rusanov et al., 2026 · ChemRxiv DOI 10.26434/chemrxiv-2025-pp32k/v2'
 ---
 
 <!--
-MB Finder v2 — A Multi-Metal AI-Driven Metallodrug Discovery System.
-
-This file is pure markdown — read it directly on GitHub. Marp directives
-(`<!-- _class: lead -->` etc.) are HTML comments that GitHub ignores;
-Marp CLI uses them if you want to render the file to PDF / HTML:
-
-  npm i -g @marp-team/marp-cli
-  marp presentation.md -o presentation.pdf
+MB Finder v2 deck. Pure markdown; reads on GitHub as-is.
+Marp directives are HTML-comment blocks elsewhere in this file
+(GitHub ignores them; Marp CLI uses them for PDF rendering).
+Render with: npm i -g @marp-team/marp-cli && marp presentation.md -o presentation.pdf
 -->
 
 <!-- _class: lead -->
@@ -25,11 +21,28 @@ Marp CLI uses them if you want to render the file to PDF / HTML:
 
 # MB Finder v2
 
-### A multi-metal, geometry-aware, agent-orchestrated AI drug-discovery system
+### A multi-metal, geometry-aware, agent-orchestrated AI drug-discovery platform
 
-A research architecture and 18-month implementation roadmap extending the published MKANO and MB Finder system.
+**I propose to design and build this system as a single-engineer 18-month roadmap**, extending the published MKANO and MB Finder system (Rusanov et al., 2026) along four self-contained engineering pillars: AI modernization, multi-metal generalisation, agentic DMTA orchestration, and MLOps / backend infrastructure.
 
 > **Source paper:** Rusanov et al., 2026 · ChemRxiv DOI [10.26434/chemrxiv-2025-pp32k/v2](https://doi.org/10.26434/chemrxiv-2025-pp32k/v2)
+
+---
+
+<!-- _class: lead -->
+
+## What I propose to build
+
+A next-generation AI-driven metallodrug discovery platform that I will deliver end-to-end as the dedicated full-time platform engineer.
+
+| | What I will build |
+| --- | --- |
+| **Pillar 1 — AI modernization** | Geometry-aware GNN (NatQG + SE(3)-equivariant) · AF3 / Boltz-2 target-conditioned scoring · ChemFM LoRA backbone · equivariant-diffusion generative track |
+| **Pillar 2 — Multi-metal + adjacent** | Strategy-pattern metal-extended sanitization (Pt → Au, Cu, Re, Ru, Pd) · multi-omics MoA inference · ElementKG+ knowledge graph |
+| **Pillar 3 — Agentic DMTA** | Supervisor + 5 specialist agents (LangGraph) · MCP tool surface · DSPy-measurable Design + Analysis agents · cooperative agency with chemist sign-off gates |
+| **Pillar 4 — MLOps & backend** | Kubernetes + MLflow + DVC · three-tier inference serving (KServe / vLLM v1 + AWQ / batch) · Prometheus/Grafana/Loki/Tempo · FAIR-data discipline · scale-to-zero cost control |
+
+**Personal commitment.** I will author the MLOps stack and data architecture end-to-end (~100 %); the chemoinformatic-core sanitization refactor, agentic orchestrator, and equivariant-diffusion generator at ~85–95 % each with chemistry / theoretical-chemistry review.
 
 ---
 
@@ -294,17 +307,18 @@ A single researcher with **combined AI, backend, and chemistry-engineering** exp
 
 ---
 
-## Why this multidisciplinary profile
+## Why this multidisciplinary profile — and why me
 
-The MKANO paper's own conclusion identifies the bottleneck:
+The MKANO source paper's own conclusion identifies the field's bottleneck:
 
 > *"A researcher possessing a combined, deep background in Artificial Intelligence, backend software development, and chemical engineering is uniquely, and perhaps exclusively, positioned to execute this exact paradigm of modern scientific discovery."*
 
-This proposal maps each component to that exact skill set:
+That is the profile I bring. Each pillar maps directly to one or two of the three skill axes:
 
-- The **metal-extended sanitization** needs chemistry + low-level RDKit — *chemistry engineering ↔ software*.
-- The **agentic orchestrator** needs LLM tooling + host-lab workflow understanding — *AI ↔ chemistry*.
-- The **MLOps stack** needs backend engineering — *the gap academic metallodrug discovery groups typically have no full-time owner for*.
+- I will own the **metal-extended sanitization refactor** — chemistry-engineering × low-level RDKit. The bridge the source paper identifies as the bottleneck.
+- I will own the **agentic orchestrator** — LangGraph + MCP + DSPy on the AI side; chemistry-workflow understanding (synthesis, in vitro, in vivo, MoA inference) on the chemistry side.
+- I will own the **MLOps stack** end-to-end — Kubernetes, MLflow, DVC, observability, three-tier inference serving. This is the gap academic metallodrug discovery groups typically have no full-time owner for; I fill it.
+- I will integrate **published collaborator code** (Strandgaard / Balcells JT-VAE; Kulik `pydentate`; Anthropic-cookbook agent patterns) rather than reinvent — so Phase 2 is months of work, not years.
 
 ---
 
@@ -339,13 +353,17 @@ The skeleton repo (`repo/`) demonstrates the architecture materialises into real
 
 ---
 
-## Bounded first-project candidates
+## My bounded first-project proposals
 
-Three concrete near-term project shapes, each bounded and falsifiable:
+Three concrete projects I propose to deliver in Phase 1 (months 0–6). Each is bounded, falsifiable, and demonstrably aligned with my combined AI / backend / chemistry-engineering profile:
 
-1. **Reproduce MKANO** in the new pipeline — Phase 1, ~3 months, parity-validated against the source paper.
-2. **Au sanitization strategy** — Phase 1, ~2 months, unlocks parallel Au drug projects.
-3. **MoA inference replay** on GSE320503 + PXD074892 — Phase 1, ~1 month, automates the PlatinAI-style mechanism analysis end-to-end.
+| # | Project | I will deliver | Timeline | Success criterion |
+| --- | --- | --- | --- | --- |
+| 1 | **Reproduce MKANO** in the new pipeline | Tagged baseline matching the source paper's ROC-AUC within ±2 % on all 4 cell lines | ~3 months | Source-paper test set passing without regression |
+| 2 | **Au sanitization strategy** | A second metal strategy (κ¹ Au(I), κ² Au(III), NHC) on top of the strategy-pattern API | ~2 months | ≥ 90 % parsing success on ≥ 100 manually curated Au complexes |
+| 3 | **MoA inference replay** on GSE320503 + PXD074892 | An automated replication of the PlatinAI-style mechanism analysis end-to-end | ~1 month | Top-5 target list recovers COL3A1, BUB1B, PLK1, AURKB |
+
+Any of the three can serve as the first concrete deliverable in the first quarter — they are independently falsifiable proof-of-fit projects.
 
 ---
 
