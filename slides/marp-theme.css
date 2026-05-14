@@ -1,6 +1,17 @@
 /* @theme babak-lab */
 /*
- * Custom Marp theme for MB Finder v2 deck.
+ * Custom Marp theme for MB Finder v2 deck — Arctic Frost palette.
+ * Selected via the theme-factory skill (pharmaceutical / clean-tech variant).
+ *
+ * Palette (Arctic Frost):
+ *   #4a6fa5  Steel Blue  — primary accent (headings, rules, borders)
+ *   #d4e4f7  Ice Blue    — light backgrounds and highlights
+ *   #c0c0c0  Silver      — metallic muted accent
+ *   #fafafa  Crisp White — clean page background
+ *
+ * Typography (Arctic Frost):
+ *   Headers: DejaVu Sans Bold
+ *   Body:    DejaVu Sans
  *
  * Usage:
  *   marp --theme-set marp-theme.css presentation.md -o presentation.pdf
@@ -16,7 +27,7 @@
 
 /* ---- Base typography & palette ---------------------------------------- */
 section {
-  font-family: 'Inter', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'DejaVu Sans', 'Inter', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   font-size: 22px;
   line-height: 1.55;
   padding: 52px 72px;
@@ -24,24 +35,30 @@ section {
   background: #fafafa;
 }
 
-h1, h2, h3 { color: #0f2c4a; letter-spacing: -0.4px; font-weight: 700; }
-h2 { border-bottom: 3px solid #fbbf24; padding-bottom: 6px; margin-top: 0; }
-h3 { margin-top: 1.2em; }
-strong { color: #0f2c4a; }
+h1, h2, h3 {
+  font-family: 'DejaVu Sans', 'Inter', system-ui, sans-serif;
+  color: #2d4a73;
+  letter-spacing: -0.4px;
+  font-weight: 700;
+}
+h2 { border-bottom: 3px solid #4a6fa5; padding-bottom: 6px; margin-top: 0; }
+h3 { margin-top: 1.2em; color: #4a6fa5; }
+strong { color: #2d4a73; }
 em { color: #475569; }
-a { color: #1d4ed8; text-decoration: none; border-bottom: 1px dotted #1d4ed8; }
+a { color: #4a6fa5; text-decoration: none; border-bottom: 1px dotted #4a6fa5; }
 
 /* ---- Inline code & blocks --------------------------------------------- */
 code {
   font-size: 88%;
-  background: #f1f5f9;
+  background: #d4e4f7;
   padding: 1px 6px;
   border-radius: 3px;
-  color: #be185d;
+  color: #2d4a73;
+  font-family: 'DejaVu Sans Mono', 'Menlo', monospace;
 }
 pre {
-  background: #0f2c4a;
-  color: #f1f5f9;
+  background: #2d4a73;
+  color: #fafafa;
   padding: 14px 18px;
   border-radius: 6px;
   font-size: 70%;
@@ -52,8 +69,8 @@ pre code { background: transparent; color: inherit; padding: 0; font-size: inher
 
 /* ---- Quotes ----------------------------------------------------------- */
 blockquote {
-  border-left: 4px solid #fbbf24;
-  background: #fef3c7;
+  border-left: 4px solid #4a6fa5;
+  background: #d4e4f7;
   padding: 14px 20px;
   font-style: italic;
   color: #334155;
@@ -63,9 +80,9 @@ blockquote {
 
 /* ---- Tables ----------------------------------------------------------- */
 table { border-collapse: collapse; width: 100%; font-size: 80%; }
-th { background: #0f2c4a; color: #fff; padding: 8px 12px; text-align: left; font-weight: 600; }
-td { padding: 6px 12px; border-bottom: 1px solid #e2e8f0; }
-tr:nth-child(even) td { background: #f8fafc; }
+th { background: #4a6fa5; color: #fafafa; padding: 8px 12px; text-align: left; font-weight: 600; }
+td { padding: 6px 12px; border-bottom: 1px solid #c0c0c0; }
+tr:nth-child(even) td { background: #f1f5fb; }
 
 /* ---- Headers and footers --------------------------------------------- */
 header { color: #94a3b8; font-size: 13px; }
@@ -74,7 +91,7 @@ section::after { color: #94a3b8; font-size: 13px; }
 
 /* ---- Lead (title) slides --------------------------------------------- */
 section.lead {
-  background: linear-gradient(135deg, #fafafa 0%, #eef2f7 100%);
+  background: linear-gradient(135deg, #fafafa 0%, #d4e4f7 100%);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -84,12 +101,13 @@ section.lead h1 {
   font-size: 76px;
   font-weight: 800;
   letter-spacing: -2.5px;
+  color: #2d4a73;
   margin: 0 0 12px 0;
 }
 section.lead h2 {
   font-size: 28px;
   font-weight: 400;
-  color: #475569;
+  color: #4a6fa5;
   border: none;
   padding: 0;
   margin: 0 0 32px 0;
@@ -97,7 +115,7 @@ section.lead h2 {
 section.lead .accent-bar {
   width: 80px;
   height: 5px;
-  background: #fbbf24;
+  background: #4a6fa5;
   margin: 0 auto 28px auto;
   border-radius: 3px;
 }
@@ -105,31 +123,40 @@ section.lead p { color: #475569; max-width: 800px; margin: 0 auto; }
 
 /* ---- Dark accent (section divider) slides ---------------------------- */
 section.accent {
-  background: #0f2c4a;
-  color: #f1f5f9;
+  background: #2d4a73;
+  color: #fafafa;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-section.accent h1, section.accent h2, section.accent h3 { color: #fff; border: none; padding: 0; }
-section.accent h2 { font-size: 56px; font-weight: 800; letter-spacing: -1.5px; margin: 0; }
+section.accent h1, section.accent h2, section.accent h3 {
+  color: #fafafa;
+  border: none;
+  padding: 0;
+}
+section.accent h2 {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin: 0;
+}
 section.accent p.eyebrow {
-  color: #fbbf24;
+  color: #d4e4f7;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
   margin: 0 0 18px 0;
 }
-section.accent p { color: #cbd5e1; font-size: 22px; max-width: 820px; }
-section.accent strong { color: #fbbf24; }
+section.accent p { color: #c0c0c0; font-size: 22px; max-width: 820px; }
+section.accent strong { color: #d4e4f7; }
 
 /* ---- Hero-stat callout ----------------------------------------------- */
 .hero { text-align: center; margin: 24px 0; }
 .hero .num {
   font-size: 120px;
   font-weight: 800;
-  color: #d97706;
+  color: #4a6fa5;
   letter-spacing: -4px;
   line-height: 1;
 }
@@ -149,28 +176,28 @@ section.accent strong { color: #fbbf24; }
 
 /* ---- Cards (generic) ------------------------------------------------- */
 .card {
-  background: #fff;
+  background: #fafafa;
   padding: 18px 22px;
   border-radius: 6px;
-  border-top: 5px solid #fbbf24;
-  box-shadow: 0 1px 4px rgba(15, 44, 74, 0.08);
+  border-top: 5px solid #4a6fa5;
+  box-shadow: 0 1px 4px rgba(45, 74, 115, 0.08);
 }
-.card h3 { margin-top: 0; font-size: 18px; color: #0f2c4a; }
+.card h3 { margin-top: 0; font-size: 18px; color: #2d4a73; }
 .card p, .card li { font-size: 16px; }
 
-/* ---- Pillar cards (Pillars 1–4) -------------------------------------- */
+/* ---- Pillar cards (Pillars 1-4) — Arctic Frost monochromatic shades -- */
 .pillar {
-  background: #fff;
+  background: #fafafa;
   padding: 16px 18px;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(15, 44, 74, 0.08);
-  border-left: 5px solid #0f2c4a;
+  box-shadow: 0 1px 4px rgba(45, 74, 115, 0.08);
+  border-left: 5px solid #4a6fa5;
 }
-.pillar.p1 { border-left-color: #1d4ed8; }
-.pillar.p2 { border-left-color: #0891b2; }
-.pillar.p3 { border-left-color: #16a34a; }
-.pillar.p4 { border-left-color: #d97706; }
-.pillar h3 { margin: 0 0 4px 0; font-size: 18px; color: #0f2c4a; }
+.pillar.p1 { border-left-color: #7a99c5; }   /* lighter steel */
+.pillar.p2 { border-left-color: #4a6fa5; }   /* steel blue primary */
+.pillar.p3 { border-left-color: #3a5985; }   /* mid-deep steel */
+.pillar.p4 { border-left-color: #2d4a73; }   /* deep steel */
+.pillar h3 { margin: 0 0 4px 0; font-size: 18px; color: #2d4a73; }
 .pillar .num {
   font-size: 12px;
   font-weight: 600;
@@ -183,18 +210,18 @@ section.accent strong { color: #fbbf24; }
 /* ---- Stack diagram (architecture) ----------------------------------- */
 .stack { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
 .layer {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-left: 5px solid #0f2c4a;
+  background: #fafafa;
+  border: 1px solid #d4e4f7;
+  border-left: 5px solid #4a6fa5;
   padding: 12px 18px;
   border-radius: 4px;
   font-size: 16px;
 }
-.layer.l1 { border-left-color: #1d4ed8; }
-.layer.l2 { border-left-color: #0891b2; }
-.layer.l3 { border-left-color: #16a34a; }
-.layer.l4 { border-left-color: #d97706; }
-.layer.l5 { border-left-color: #be185d; }
+.layer.l1 { border-left-color: #7a99c5; }
+.layer.l2 { border-left-color: #4a6fa5; }
+.layer.l3 { border-left-color: #3a5985; }
+.layer.l4 { border-left-color: #2d4a73; }
+.layer.l5 { border-left-color: #1e3a5f; }
 .layer .label {
   font-size: 11px;
   font-weight: 700;
@@ -206,17 +233,17 @@ section.accent strong { color: #fbbf24; }
 
 /* ---- Tier cards (inference serving) --------------------------------- */
 .tier {
-  background: #fff;
+  background: #fafafa;
   padding: 14px 16px;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(15, 44, 74, 0.08);
-  border-top: 4px solid #0f2c4a;
+  box-shadow: 0 1px 4px rgba(45, 74, 115, 0.08);
+  border-top: 4px solid #4a6fa5;
   font-size: 15px;
 }
-.tier.t1 { border-top-color: #1d4ed8; }
-.tier.t2 { border-top-color: #0891b2; }
-.tier.t3 { border-top-color: #d97706; }
-.tier h3 { margin: 0 0 4px 0; font-size: 16px; color: #0f2c4a; }
+.tier.t1 { border-top-color: #7a99c5; }
+.tier.t2 { border-top-color: #4a6fa5; }
+.tier.t3 { border-top-color: #2d4a73; }
+.tier h3 { margin: 0 0 4px 0; font-size: 16px; color: #2d4a73; }
 .tier .meta {
   font-size: 11px;
   font-weight: 700;
@@ -230,23 +257,23 @@ section.accent strong { color: #fbbf24; }
   display: inline-block;
   padding: 1px 8px;
   border-radius: 3px;
-  background: #fef3c7;
-  color: #92400e;
+  background: #d4e4f7;
+  color: #2d4a73;
   font-size: 13px;
   font-weight: 600;
 }
 
 /* ---- Roadmap phases ------------------------------------------------- */
 .phase {
-  background: #fff;
+  background: #fafafa;
   padding: 16px 18px;
   border-radius: 6px;
-  border-left: 5px solid #1d4ed8;
-  box-shadow: 0 1px 4px rgba(15, 44, 74, 0.08);
+  border-left: 5px solid #7a99c5;
+  box-shadow: 0 1px 4px rgba(45, 74, 115, 0.08);
 }
-.phase.p2 { border-left-color: #0891b2; }
-.phase.p3 { border-left-color: #d97706; }
-.phase h3 { margin: 0 0 4px 0; font-size: 18px; }
+.phase.p2 { border-left-color: #4a6fa5; }
+.phase.p3 { border-left-color: #2d4a73; }
+.phase h3 { margin: 0 0 4px 0; font-size: 18px; color: #2d4a73; }
 .phase .months {
   font-size: 12px;
   color: #94a3b8;
@@ -258,14 +285,14 @@ section.accent strong { color: #fbbf24; }
 
 /* ---- Track A / Track B columns -------------------------------------- */
 .track {
-  background: #fff;
+  background: #fafafa;
   padding: 16px 18px;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(15, 44, 74, 0.08);
-  border-top: 5px solid #1d4ed8;
+  box-shadow: 0 1px 4px rgba(45, 74, 115, 0.08);
+  border-top: 5px solid #4a6fa5;
 }
-.track.b { border-top-color: #d97706; }
-.track h3 { margin: 0 0 4px 0; font-size: 18px; color: #0f2c4a; }
+.track.b { border-top-color: #2d4a73; }
+.track h3 { margin: 0 0 4px 0; font-size: 18px; color: #2d4a73; }
 .track .label {
   font-size: 11px;
   font-weight: 700;
