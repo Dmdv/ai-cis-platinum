@@ -1,5 +1,14 @@
 # ADR-004 — LangGraph for the agentic orchestrator
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** Pillar 3 introduces a multi-agent DMTA orchestrator. Several frameworks are viable: LangChain, LangGraph, CrewAI, AutoGen, custom.

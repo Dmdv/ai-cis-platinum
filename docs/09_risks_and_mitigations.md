@@ -1,5 +1,15 @@
 # 09 — Risks and Mitigations
 
+**Contents**
+
+- [Technical risks](#technical-risks)
+- [Data risks](#data-risks)
+- [Operational risks](#operational-risks)
+- [Scientific and reputational risks](#scientific-and-reputational-risks)
+- [Strategic risks](#strategic-risks)
+- [Risk register summary](#risk-register-summary)
+
+
 A frank assessment of what can go wrong with the proposed system and how each risk is addressed in the architecture.
 
 ## Technical risks

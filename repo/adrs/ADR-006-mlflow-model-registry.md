@@ -1,5 +1,14 @@
 # ADR-006 — MLflow as model registry and experiment tracker
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** Every model in MB Finder v2 must be versioned, reproducibly built, and tied to its training data. The choice of registry sets the operational pattern for the next several years.

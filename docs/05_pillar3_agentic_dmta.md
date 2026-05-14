@@ -1,5 +1,19 @@
 # 05 — Pillar 3: Agentic DMTA Orchestration
 
+**Contents**
+
+- [Goal](#goal)
+- [Component 3.1 — Agent role model](#component-31-agent-role-model)
+- [Component 3.2 — Orchestration architecture](#component-32-orchestration-architecture)
+- [Component 3.3 — Example campaign walkthrough](#component-33-example-campaign-walkthrough)
+- [Component 3.4 — Tool surface contracts](#component-34-tool-surface-contracts)
+- [Component 3.5 — Integration with existing lab tools](#component-35-integration-with-existing-lab-tools)
+- [Why this architecture, not full autonomy](#why-this-architecture-not-full-autonomy)
+- [Technology choices](#technology-choices)
+- [Risks and unknowns](#risks-and-unknowns)
+- [Phase deliverables](#phase-deliverables)
+
+
 ## Goal
 
 Compress the Design–Make–Test–Analyze cycle from months to weeks by introducing an LLM-supervised multi-agent orchestrator that schedules computational and wet-lab tasks, calls the system's prediction services, and surfaces decisions to chemists for approval. Crucially, the agent does **not** generate scientific data autonomously — it coordinates, schedules, and synthesises results. The chemist remains the final approver of every wet-lab step.

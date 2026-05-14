@@ -1,5 +1,23 @@
 # 11 — References
 
+**Contents**
+
+- [Source paper](#source-paper)
+- [AI / ML foundations](#ai-ml-foundations)
+- [Transition-metal-specific datasets and methods](#transition-metal-specific-datasets-and-methods)
+- [Agentic AI for chemistry and drug discovery](#agentic-ai-for-chemistry-and-drug-discovery)
+- [Reviews and overviews](#reviews-and-overviews)
+- [Multi-omics and target deconvolution](#multi-omics-and-target-deconvolution)
+- [Self-driving labs](#self-driving-labs)
+- [Cisplatin biology and mechanism](#cisplatin-biology-and-mechanism)
+- [Cheminformatics tooling](#cheminformatics-tooling)
+- [Local LLM fine-tuning and inference](#local-llm-fine-tuning-and-inference)
+- [Agent frameworks and protocols](#agent-frameworks-and-protocols)
+- [American peer-reviewed venues](#american-peer-reviewed-venues)
+- [Practitioner press (Substack / Medium)](#practitioner-press-substack-medium)
+- [Source-paper adjacent research lines (cited for context)](#source-paper-adjacent-research-lines-cited-for-context)
+
+
 ## Source paper
 
 1. Rusanov, D. A.; Matnurov, E. M.; Dolgov, D.; Brezgunov, D. Yu.; Ivanov-Rostovtsev, P. A.; Kriukov, K.; Pashaliev, B. L.; Choe, H.-J.; Yarshova, M.; Luk, J. H. K. K.; Petrović, T.; Abylova, B.; Aitkulova, D.; Alfadul, S. M.; D'Cruz, G.; Vetrova, V. V.; Balcells, D.; Babak, M. V. *Overcoming cisplatin resistance with AI-driven metallodrug discovery*. ChemRxiv preprint, 2 March 2026. DOI: 10.26434/chemrxiv-2025-pp32k/v2. Code: https://github.com/thebabaklab/MetalKANO. Platform: https://www.mb-finder.org.

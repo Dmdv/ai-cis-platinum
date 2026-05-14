@@ -1,5 +1,14 @@
 # ADR-009 — Fine-tuning methodology: QLoRA + DoRA via Unsloth as default
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** The proposal commits to fine-tuning ChemFM (or equivalent 3 B-class chemistry foundation model) on a 17,732-IC50 Pt-complex corpus (matching the published MKANO dataset), with optional continued pretraining on the 214,373 unlabeled SMILES. The choice of fine-tuning method determines reproducibility, hardware footprint, and the cost of running ablations and per-metal head specialisations.

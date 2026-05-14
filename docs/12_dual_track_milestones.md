@@ -1,5 +1,19 @@
 # 12 — Dual-Track Milestones: Consolidation and Decision Register
 
+**Contents**
+
+- [Executive summary — the two tracks](#executive-summary-the-two-tracks)
+- [Track A — Evolve the existing lab platform](#track-a-evolve-the-existing-lab-platform)
+- [Track B — Build the next-gen platform (in parallel)](#track-b-build-the-next-gen-platform-in-parallel)
+- [Where the tracks converge — shared infrastructure](#where-the-tracks-converge-shared-infrastructure)
+- [Resource allocation across phases](#resource-allocation-across-phases)
+- [Decision register](#decision-register)
+- [Risk matrix per track](#risk-matrix-per-track)
+- [Convergence and divergence](#convergence-and-divergence)
+- [Visual artefacts (Mermaid sources)](#visual-artefacts-mermaid-sources)
+- [How to use this document](#how-to-use-this-document)
+
+
 **Purpose.** This document consolidates the architectural decisions, primary-source evidence, and code-grounded adoption paths into **two parallel work tracks** with explicit milestones, resource allocation, and convergence points.
 
 The two tracks are not alternatives — they run in parallel and share the same underlying infrastructure. The researcher operates on both simultaneously, with the allocation shifting across phases.

@@ -1,5 +1,14 @@
 # 01 — Problem and Context
 
+**Contents**
+
+- [The systemic problem](#the-systemic-problem)
+- [The AI-for-metallodrugs gap](#the-ai-for-metallodrugs-gap)
+- [Contribution of the source paper](#contribution-of-the-source-paper)
+- [Stated roadmap (from the source paper)](#stated-roadmap-from-the-source-paper)
+- [The opportunity the proposed system addresses](#the-opportunity-the-proposed-system-addresses)
+
+
 ## The systemic problem
 
 Pharmaceutical R&D has a structural cost problem that AI has begun to compress in the organic small-molecule domain. A new drug now takes 12–15 years and ≈US $2.6 B per approved entity to develop; fewer than 10 % of compounds entering Phase I clinical trials reach regulatory approval; high-throughput screening alone produces hit rates as low as 2.5 % (Ferreira & Carneiro, *ACS Omega* 10, 23889, 2025; Zhang et al., *Nat. Med.* 31, 45, 2025).

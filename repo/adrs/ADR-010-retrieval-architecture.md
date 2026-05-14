@@ -1,5 +1,15 @@
 # ADR-010 — Retrieval architecture: hybrid dense + BM25 + GraphRAG + multimodal
 
+**Contents**
+
+- [Decision](#decision)
+- [Storage](#storage)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** A multi-agent chemistry orchestrator (Pillar 3) with literature mining, ELN integration, and a knowledge graph (Pillar 2) needs a serious retrieval stack. A pgvector-only retrieval surface is insufficient for a 2026 chemistry system: it covers neither sparse (BM25) signals, nor knowledge-graph traversal, nor multi-modal retrieval of structural figures in chemistry PDFs.

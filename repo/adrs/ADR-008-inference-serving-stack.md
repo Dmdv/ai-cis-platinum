@@ -1,5 +1,15 @@
 # ADR-008 — Three-tier inference serving stack
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Quantisation policy](#quantisation-policy)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** MB Finder v2 serves three qualitatively different inference workloads: a small GNN classifier (MKANO+), foundation-model and LLM inference (ChemFM-LoRA, Llama 3 / Qwen 2.5 / ChemDFM), and structure prediction (AlphaFold 3 / Boltz-2 / RoseTTAFold All-Atom). Each has different latency, batching, and GPU-utilisation profiles. A single serving stack would be suboptimal everywhere.

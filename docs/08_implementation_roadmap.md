@@ -1,5 +1,17 @@
 # 08 — Implementation Roadmap
 
+**Contents**
+
+- [Principles](#principles)
+- [Phase 1 — Foundations (months 0–6)](#phase-1-foundations-months-06)
+- [Phase 2 — Modernisation (months 6–12)](#phase-2-modernisation-months-612)
+- [Phase 3 — Generative + Scale (months 12–18)](#phase-3-generative-scale-months-1218)
+- [Team composition assumptions](#team-composition-assumptions)
+- [Critical path](#critical-path)
+- [Risk-weighted timeline (Gantt summary)](#risk-weighted-timeline-gantt-summary)
+- [Success metrics](#success-metrics)
+
+
 ## Principles
 
 - **Reproduce first, extend second.** Before any new capability ships, the existing MKANO + MB Finder behaviour must be reproducible in the new system.

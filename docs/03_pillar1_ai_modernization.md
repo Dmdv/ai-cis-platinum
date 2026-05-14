@@ -1,5 +1,17 @@
 # 03 — Pillar 1: AI Modernization
 
+**Contents**
+
+- [Goal](#goal)
+- [Component 1.1 — Geometry-aware molecular representation](#component-11-geometry-aware-molecular-representation)
+- [Component 1.2 — Target-aware design with AlphaFold 3 / Boltz-2](#component-12-target-aware-design-with-alphafold-3-boltz-2)
+- [Component 1.3 — Foundation-model backbone](#component-13-foundation-model-backbone)
+- [Component 1.4 — Truly generative architecture beyond fragment assembly](#component-14-truly-generative-architecture-beyond-fragment-assembly)
+- [Technology choices](#technology-choices)
+- [Risks and unknowns](#risks-and-unknowns)
+- [Phase deliverables](#phase-deliverables)
+
+
 ## Goal
 
 Bring the AI stack into 2026 capability: predict geometry, condition on protein targets, replace the GNN backbone with a chemistry foundation model, and add truly generative architectures alongside the existing fragment assembly. Every component proposed here is published, validated, and operational in current literature.

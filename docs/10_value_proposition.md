@@ -1,5 +1,15 @@
 # 10 — Value Proposition: Skill–Component Fit
 
+**Contents**
+
+- [The argument](#the-argument)
+- [Skill–component matrix](#skillcomponent-matrix)
+- [Where the combined background is decisive](#where-the-combined-background-is-decisive)
+- [Adjacent expertise the platform engineer does not claim](#adjacent-expertise-the-platform-engineer-does-not-claim)
+- [Specific deliverables for the platform engineer](#specific-deliverables-for-the-platform-engineer)
+- [Why this profile compounds](#why-this-profile-compounds)
+
+
 ## The argument
 
 The MKANO source paper makes its strongest hiring argument in its conclusion: *"A researcher possessing a combined, deep background in Artificial Intelligence, backend software development, and chemical engineering is uniquely, and perhaps exclusively, positioned to execute this exact paradigm of modern scientific discovery."*

@@ -1,5 +1,13 @@
 # ADR-001 — Polyglot microservices over monolith
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+
+
 **Status:** Accepted (skeleton design).
 **Date:** 2026-05-14.
 **Context:** MB Finder v2 must support multiple workloads (web UI, ML inference, agentic orchestration, data ingestion) with different scaling characteristics. The MKANO source code is currently a research monolith.

@@ -1,5 +1,14 @@
 # ADR-012 — Autonomy level commitment (L2 with L3 in Phase 3)
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** Reviewers of an AI-driven drug discovery proposal will reasonably ask: *"how autonomous is this thing, really?"*. Without a recognised yardstick, the answer is rhetorically squishy. Evans & Desai's 5-level autonomy ladder (TechPolitik, *Self-driving labs = infrastructure, not just intelligence*, February 2026) — modelled on SAE driving levels — is the most defensible vocabulary the field has produced.

@@ -1,5 +1,19 @@
 # 07 — Data Architecture
 
+**Contents**
+
+- [Goal](#goal)
+- [Data domains](#data-domains)
+- [Logical schema (selected entities)](#logical-schema-selected-entities)
+- [Data tiers (medallion architecture)](#data-tiers-medallion-architecture)
+- [Schema evolution and migrations](#schema-evolution-and-migrations)
+- [Identifier strategy](#identifier-strategy)
+- [Data quality monitoring](#data-quality-monitoring)
+- [Provenance and reproducibility](#provenance-and-reproducibility)
+- [Open-data publication](#open-data-publication)
+- [Data architecture diagram](#data-architecture-diagram)
+
+
 ## Goal
 
 A coherent, FAIR, versioned data foundation that supports the four pillars above. The architecture distinguishes three layers: raw experimental data, sanitized canonical entities, and analytical / training feature stores.

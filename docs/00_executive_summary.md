@@ -1,5 +1,15 @@
 # 00 — Executive Summary
 
+**Contents**
+
+- [The opportunity](#the-opportunity)
+- [The architecture in one paragraph](#the-architecture-in-one-paragraph)
+- [Why this multidisciplinary profile](#why-this-multidisciplinary-profile)
+- [Headline numbers and commitments](#headline-numbers-and-commitments)
+- [Roadmap snapshot](#roadmap-snapshot)
+- [Risk posture](#risk-posture)
+
+
 ## The opportunity
 
 In March 2026 the source paper *Overcoming cisplatin resistance with AI-driven metallodrug discovery* (Rusanov et al., ChemRxiv 2026, DOI 10.26434/chemrxiv-2025-pp32k/v2) reported the first end-to-end deep-learning pipeline that successfully designed, synthesised, and *in vivo* validated a novel platinum complex (PlatinAI) capable of bypassing cisplatin resistance. The work combined a manually curated dataset of 3,725 Pt complexes, a metal-extended RDKit sanitization routine, a knowledge-graph-enhanced contrastive GNN (MKANO), and the publicly deployed MB Finder web platform.

@@ -1,5 +1,17 @@
 # 02 — High-Level Architecture
 
+**Contents**
+
+- [System overview](#system-overview)
+- [Pillar mapping](#pillar-mapping)
+- [Component inventory](#component-inventory)
+- [Retrieval and embedding layer](#retrieval-and-embedding-layer)
+- [Cross-cutting concerns](#cross-cutting-concerns)
+- [Architectural style](#architectural-style)
+- [Why this shape](#why-this-shape)
+- [Component diagrams](#component-diagrams)
+
+
 ## System overview
 
 MB Finder v2 is a multi-metal, geometry-aware, agent-orchestrated, production-grade AI drug-discovery platform. It is organised as a set of loosely coupled services around a shared chemoinformatic core, a shared data lake, and a shared model registry. Four functional pillars sit on top of this shared infrastructure.

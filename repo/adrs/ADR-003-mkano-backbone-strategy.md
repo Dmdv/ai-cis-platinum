@@ -1,5 +1,14 @@
 # ADR-003 — MKANO retained alongside foundation-model backbone
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** Pillar 1 introduces a chemistry foundation model (ChemFM-LoRA) as a candidate replacement for the MKANO contrastive GNN backbone. The decision is whether to replace or to add.

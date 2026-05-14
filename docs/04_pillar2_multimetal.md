@@ -1,5 +1,18 @@
 # 04 — Pillar 2: Multi-Metal Generalisation and Adjacent-Science Integration
 
+**Contents**
+
+- [Goal](#goal)
+- [Component 2.1 — Generalised metal-extended chemoinformatic core](#component-21-generalised-metal-extended-chemoinformatic-core)
+- [Component 2.2 — Multi-metal MKANO+](#component-22-multi-metal-mkano)
+- [Component 2.3 — Multi-omics MoA inference module](#component-23-multi-omics-moa-inference-module)
+- [Component 2.4 — Cross-project knowledge graph](#component-24-cross-project-knowledge-graph)
+- [Adjacent-science applications](#adjacent-science-applications)
+- [Technology choices](#technology-choices)
+- [Risks and unknowns](#risks-and-unknowns)
+- [Phase deliverables](#phase-deliverables)
+
+
 ## Goal
 
 Two intertwined objectives:

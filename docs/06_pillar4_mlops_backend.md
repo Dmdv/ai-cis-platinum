@@ -1,5 +1,21 @@
 # 06 — Pillar 4: MLOps and Backend Infrastructure
 
+**Contents**
+
+- [Goal](#goal)
+- [Component 4.1 — Reproducible training and evaluation](#component-41-reproducible-training-and-evaluation)
+- [Component 4.2 — Model registry and serving](#component-42-model-registry-and-serving)
+- [Component 4.3 — Continuous integration and deployment](#component-43-continuous-integration-and-deployment)
+- [Component 4.4 — Observability](#component-44-observability)
+- [Component 4.5 — Data engineering](#component-45-data-engineering)
+- [Component 4.6 — Security, licensing, and FAIR data](#component-46-security-licensing-and-fair-data)
+- [Component 4.7 — Backup, disaster recovery, and audit](#component-47-backup-disaster-recovery-and-audit)
+- [Technology choices](#technology-choices)
+- [Cost envelope (estimated)](#cost-envelope-estimated)
+- [Risks and unknowns](#risks-and-unknowns)
+- [Phase deliverables](#phase-deliverables)
+
+
 ## Goal
 
 Take research-grade code (typically a Jupyter-notebook-and-shell-scripts assembly with manually trained checkpoints) and turn it into production infrastructure that supports:

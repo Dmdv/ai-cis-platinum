@@ -1,5 +1,14 @@
 # ADR-005 — Knowledge graph: Neo4j first, with migration path to Postgres + pg_graph
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted (provisionally).
 **Date:** 2026-05-14.
 **Context:** Pillar 2 introduces ElementKG+, a unified knowledge graph linking compounds, cell lines, proteins, pathways, and the lab's internal experiments. The store choice has long-term implications for query expressiveness, operational simplicity, and cost.

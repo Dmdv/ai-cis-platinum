@@ -1,5 +1,15 @@
 # ADR-011 — Skill curation as a first-class deliverable
 
+**Contents**
+
+- [Decision](#decision)
+- [Initial skill inventory (Phase 1 deliverable)](#initial-skill-inventory-phase-1-deliverable)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** The proposal commits to hybrid architecture #2+#3 (LangGraph multi-agent + Anthropic-style Skills; see ADR-004 and Pillar 3 Component 3.4.1a-c). The Skills primitive — markdown procedures + optional executables, loaded on-demand inside the agents — is identified by Anthropic and by independent practitioners (Greyling Jan 2026, BoringBot May 2026) as the architectural primitive most teams discover last but should reach for first. This ADR formalises Skill curation as a durable scientific artefact for the lab.

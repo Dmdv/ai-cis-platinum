@@ -1,5 +1,14 @@
 # ADR-007 — Model Context Protocol (MCP) as the tool surface contract
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+- [Revisit conditions](#revisit-conditions)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** Pillar 3 (the agentic orchestrator) introduces a tool-call surface that exposes the lab's chemistry capabilities (chemoinformatic-core sanitization, inference-api prediction, retrosynthesis, ELN, knowledge-graph query) to LLM agents. The choice of wire protocol determines portability, interoperability with external AI clients, and resilience to agent-framework churn.

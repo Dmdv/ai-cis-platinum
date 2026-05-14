@@ -1,5 +1,13 @@
 # ADR-002 — PostgreSQL + RDKit cartridge as canonical chemistry store
 
+**Contents**
+
+- [Decision](#decision)
+- [Rationale](#rationale)
+- [Consequences](#consequences)
+- [Alternatives considered](#alternatives-considered)
+
+
 **Status:** Accepted.
 **Date:** 2026-05-14.
 **Context:** The system must index hundreds of thousands of compounds with sub-second substructure and similarity search. Chemistry-aware indexing is mandatory.
