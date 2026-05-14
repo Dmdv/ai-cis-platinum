@@ -61,8 +61,8 @@ The system decomposes into seven services and three shared platforms. The skelet
 3. **`model-training`** — training jobs for MKANO+ classifiers, geometry-aware GNNs, foundation-model fine-tunes, and generative diffusion. Tracked end-to-end in MLflow.
 4. **`inference-api`** — synchronous and asynchronous prediction endpoints (single-molecule, batch, structure-aware). FastAPI gateway routing to the three-tier serving stack (KServe for small classifiers; vLLM v1 + AWQ for LLMs; custom batch service for AF3 / Boltz-2). See ADR-008 for the full stack.
 5. **`agentic-orchestrator`** — LangGraph-style multi-agent service driving DMTA. Tool surface: every other service in the system, plus external services (literature search, ELN, structure prediction).
-6. **`web-ui`** — the public MB Finder front-end (Next.js or React + RDKit JS).
-7. **`reporting`** — generates publication-ready figures, tables, and dossiers for any candidate in the system.
+6. **`web-ui`** — the public MB Finder front-end (Next.js or React + RDKit JS). **Publication-ready figures, tables, and candidate dossiers** are rendered by routes inside `web-ui` (the earlier draft listed a separate `reporting` service; that decomposition didn't earn its keep — folded into web-ui until reporting has a distinct bounded context worth a service split).
+7. **`mcp-code-runner`** — sandbox runtime that hosts MCP code-execution blocks emitted by the Design / Analysis agents. Pyodide-based for Phase-1; gVisor + CPython graduation in Phase-2/3 when native binaries are required. See ADR-013 for the full decision.
 
 ### Shared platforms
 
