@@ -158,6 +158,45 @@ Introducing new tools to a working lab carries change-management cost.
 - Chemists are involved in design from Phase 1; the system is built *for* them.
 - Adoption metrics are tracked (active users, weekly campaigns); friction is escalated and addressed.
 
+## Compliance and supply-chain risks
+
+### R17 — Data-license collision on aggregated open-data releases
+The platform ingests compounds and assay data from heterogeneous sources with incompatible licences: ChEMBL (CC-BY-SA 3.0 — share-alike), PubChem (public-domain), CSD (proprietary, **redistribution-restricted**), MetAP DB (mixed academic terms), in-house lab data (default unlicensed). The Phase-3 open-data release plan publishes a **CC-BY-4.0** combined corpus (per `docs/06_pillar4_mlops_backend.md`), which is *not legally automatic*: ChEMBL's CC-BY-SA imposes share-alike on derivatives, and CSD redistribution clauses prohibit republishing CSD-derived data in any open licence.
+
+**Mitigation:**
+- Per-row `license` field carried through the data lake from ingest onwards; the open-data release is filtered on `license IN (public-domain, CC-BY-SA, CC-BY)` and **excludes** CSD-derived rows.
+- Aggregated derivatives of CC-BY-SA inputs are released under CC-BY-SA, not CC-BY-4.0, when share-alike applies.
+- The host institution's research office (or equivalent legal counsel) signs off on the open-data release plan before each publication.
+- A "data-licence audit" milestone is added to Phase 3 immediately preceding any open-data release (`docs/12_dual_track_milestones.md` Phase-3 update).
+
+### R18 — Regulatory exposure on AI-generated novel chemical matter
+Novel compounds proposed by the generative pipeline (JT-VAE, equivariant diffusion if it ships) raise emerging regulatory questions: FDA / EMA positions on AI-suggested NCEs; intellectual-property novelty when the generative model proposes the structure; EU AI Act (2025) categorisation of chemistry foundation models that could in principle propose toxic-warfare-relevant complexes (dual-use); export-control implications for organometallic compounds with theoretical military relevance.
+
+**Mitigation:**
+- Every published claim about an AI-generated candidate carries the model version, dataset hash, and confidence interval.
+- The platform is positioned as a **research-acceleration tool**, not as a regulatory-submission-ready instrument; the FDA / EMA / regulator-of-record path is the chemist's responsibility, not the platform's.
+- A **dual-use review checklist** runs before any open-data release of generated-candidate sets: candidates whose predicted activity falls in known weaponisable-toxicity classes (e.g. organophosphate-mimetic Pt complexes) are flagged and held for review.
+- EU AI Act (and HKSAR / other regional) compliance categorisations are reviewed by the host institution's research-ethics office at each major release.
+
+### R19 — Vendor LLM API price shock
+The cost envelope assumes Claude 4 Opus at ≈ $15 / $75 per million tokens (input / output). Frontier LLM providers (OpenAI, Anthropic, Google) have re-priced 2-4× in the trailing 24 months. A doubling of input-token prices wipes out the Phase-2 self-hosted-vs-cloud cross-over (≈ 25–50 M tokens/month) and turns the cost envelope from defensible to indefensible mid-roadmap.
+
+**Mitigation:**
+- **Token-budget circuit breaker.** The orchestrator emits `llm_tokens_total` (`docs/06_pillar4_mlops_backend.md`) tagged per campaign and per agent; a budget cap is enforced *per-campaign*, not just per-month. When 80 % of the monthly token budget is consumed, a Slack alert fires and the freeze-on-burn policy (per `docs/06a_slo_register.md`) pauses new campaign starts.
+- **Provider-portable abstraction layer.** The agentic-orchestrator never imports `openai` or `anthropic` directly; all LLM calls go through a thin provider-abstraction that supports OpenAI / Anthropic / Google / self-hosted vLLM with the same interface. Provider swap = config change.
+- **Self-hosted Llama 3 70B AWQ** (per ADR-008 Tier 2) is operational from Phase 2; switching the Supervisor from Claude to self-hosted Llama is a one-line config change.
+- **Quarterly cost-envelope review** with explicit re-pricing against current vendor rates; the cost envelope is treated as a moving target, not a fixed budget.
+
+### R20 — Talent retention for chemistry-aware MLOps engineer
+The platform engineer described in this proposal (combined AI + backend + chemistry-engineering profile) is rare and expensive at industry rates. Academic-lab salary bands are unlikely to retain such a person past Phase 2 once the system is interesting; an engineer leaving mid-roadmap leaves the platform exposed (per R10 — single-engineer fragility). R10 covers documentation; R20 covers labour-market reality.
+
+**Mitigation:**
+- **Co-PI on Pillar 4.** The host institution designates a Pillar-4 co-PI (PhD-level, present from Phase 1) who shadows the platform engineer's operational decisions. Not a replacement — but a continuity bridge.
+- **Phase-by-phase rotation budget.** From Phase 2 onwards, 10 % of platform-engineer time is allocated to *training-the-replacement* activities: runbooks, recorded deploy procedures, paired-pair-programming with the co-PI on production code.
+- **Cross-train one or two chemist team members** in the operationally critical paths (deploys, dashboards, backups) per R10. R20 extends this to the agentic-orchestrator's prompt updates and the model registry — areas a chemist co-operator can run.
+- **Publication-and-codebase strategy.** The platform's MLOps stack, code, and ADRs are open-source from Phase 1; the engineer's contribution is academically credit-able, which improves retention by aligning institutional reward signals with the engineer's CV.
+- **Honest succession plan.** If the engineer departs mid-roadmap, the descope order is published in advance: cross-project knowledge graph → Skills marketplace → public SDKs (per `docs/08_implementation_roadmap.md` critical path). The platform survives on a single chemist co-operator + the published documentation.
+
 ## Risk register summary
 
 | ID | Risk | Likelihood | Impact | Mitigation status |
@@ -178,3 +217,7 @@ Introducing new tools to a working lab carries change-management cost.
 | R14 | Regulatory pitfalls | Low | Medium | Mitigated (compliance review) |
 | R15 | Scope creep | High | Medium | Mitigated (roadmap-as-contract) |
 | R16 | Workflow disruption | Medium | Medium | Mitigated (parallel run + chemist involvement) |
+| R17 | Data-license collision (CSD redistribution; CC-BY-SA share-alike) | Medium | High | Mitigated (per-row license field; legal-counsel sign-off) |
+| R18 | AI-NCE regulatory / EU AI Act dual-use exposure | Low | High | Mitigated (research-tool framing; dual-use review checklist) |
+| R19 | Vendor LLM API price shock | High | Medium | Mitigated (token-budget circuit breaker; provider-portable layer; self-hosted fallback) |
+| R20 | Chemistry-aware MLOps engineer retention | High | High | Partially mitigated (Pillar-4 co-PI; succession plan; open-source publication strategy) |

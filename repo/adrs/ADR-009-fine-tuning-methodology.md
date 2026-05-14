@@ -71,6 +71,21 @@ Each of these is a verifiable reward at low risk of being hacked. GRPO computes 
 
 **Tooling:** PEFT (Hugging Face), Unsloth, TRL v1.0 (April 2026) for DPO / KTO / GRPO, Axolotl as configuration layer.
 
+### Dependency fallback matrix (Phase-1 reproducibility safety net)
+
+Several components named above pin to versions that were forward-dated at the time this ADR was written. The recipe is therefore paired with a fallback matrix so reproducibility does not depend on a single upstream release landing on schedule:
+
+| Component | Phase-1 pinned version (works 2026-05-14) | Phase-2 / Phase-3 upgrade target | Fallback if upgrade slips |
+| --- | --- | --- | --- |
+| **Unsloth** | `unsloth>=2025.x` (latest 2025.x release at proposal start) | `unsloth>=2026.x` when Llama-4-Scout / gpt-oss-120b kernels stabilise | Pin to last-known-good 2025.x release; defer larger-model support to Phase 3 |
+| **TRL** | `trl>=0.13` (current stable 2025-Q4 release; provides GRPO / DPO / KTO without v1.0 dependency) | `trl>=1.0` (April 2026 release, per FutureHouse / Anthropic adoption) | Stay on `trl>=0.13`; use the Phase-1 GRPO implementation if TRL 1.0 ships with breaking changes |
+| **FlashAttention** | **FA-3** on Hopper (≈740 TFLOPs/s, 75 % utilisation) | **FA-4** on Blackwell when B200 / GB300 NVL72 hardware is procured | FA-3 remains production-grade on Hopper indefinitely; FA-4 is a Blackwell-only Phase-2/3 upgrade |
+| **PyTorch** | `torch>=2.5` (current stable) | `torch>=2.7` for Blackwell native support | Stay on 2.5 LTS-equivalent; defer Blackwell support to Phase 3 |
+| **bitsandbytes** | `bitsandbytes>=0.43` | `bitsandbytes>=0.45` when AWQ kernel improvements land | 0.43 covers the AWQ / NF4 production paths; upgrade is optional |
+| **CUDA** | 12.4+ (Hopper); 12.6+ when Blackwell is on-prem | 12.8+ when CuTe-DSL becomes mandatory | Hold on the lab's actual CUDA driver version; defer Blackwell-only kernels |
+
+**Reproducibility rule:** every fine-tuning run records all six versions in MLflow alongside the dataset DVC hash and the Hydra config hash. A failed reproducibility check is a stop-the-line event.
+
 ## Rationale
 
 - **QLoRA at 4-bit is the 2025-2026 default** for academic-budget LLM fine-tuning. It is the most-cited method in practitioner press (Kaitchup, Maarten Grootendorst, Unsloth docs) and the only method that consistently delivers fine-tuning of 70 B-class models on single-GPU hardware.

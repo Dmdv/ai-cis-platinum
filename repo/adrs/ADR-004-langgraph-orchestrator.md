@@ -69,3 +69,13 @@ The proposed DMTA campaign loop has cycles (analysis feeds back to design), cond
 - A simpler model emerges that meets the same auditability requirements with less surface area.
 - Anthropic's Skills ecosystem matures enough that architecture #3 alone subsumes the lab's needs (orchestrator becomes a thin Skills harness rather than a state machine).
 - The MCP code-execution pattern (ADR-007) becomes powerful enough that the orchestrator simplifies into a single agent that writes code calling all chemistry tools as one execution block.
+
+## Decision metric (measurable trigger for re-evaluation)
+
+By the end of Phase-1 month 4, the LangGraph orchestrator MUST demonstrate:
+
+1. **Checkpoint-restore-resume round-trip latency** ≤ 60 s on a representative campaign state (≈10 candidates, ≈3 synthesis records, ≈10 assay results).
+2. **At least 3 conditional re-plan events** triggered by chemist-approval gates or assay anomaly detection across a representative DMTA campaign dry-run.
+3. **Audit log** captures every agent decision with timestamp, agent identity, rationale, and approval status.
+
+If any of these three criteria fails by month 4, the platform engineer runs a 2-week CrewAI Flows spike (against the same campaign workload) and presents a head-to-head comparison to the principal investigator. The criterion is *measurable*, not philosophical — "LangGraph feels slow" is not a trigger; the 60 s / 3-re-plan threshold is.

@@ -44,6 +44,7 @@ Each ADR captures one durable architectural commitment. Standard sections: Statu
 | ADR-010 | [`repo/adrs/ADR-010-retrieval-architecture.md`](repo/adrs/ADR-010-retrieval-architecture.md) | Hybrid BGE-M3 + BM25 + GraphRAG + ColPali multimodal retrieval. |
 | ADR-011 | [`repo/adrs/ADR-011-skill-curation.md`](repo/adrs/ADR-011-skill-curation.md) | Skill curation as a first-class deliverable. |
 | ADR-012 | [`repo/adrs/ADR-012-autonomy-level.md`](repo/adrs/ADR-012-autonomy-level.md) | Target autonomy L2 (Phase 1-2), L3 (Phase 3) per Evans & Desai. |
+| ADR-013 | [`repo/adrs/ADR-013-sandbox-runtime.md`](repo/adrs/ADR-013-sandbox-runtime.md) | Sandbox runtime for MCP code execution (Pyodide Phase-1; gVisor Phase-2/3). |
 
 ---
 
