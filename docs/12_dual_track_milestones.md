@@ -65,13 +65,16 @@ The sum of M-tagged effort per phase is targeted at ≤ 75 % of a single enginee
 |---|---|---|---|---|---|
 | A1.1 | **M** | Reproduce MKANO end-to-end in the new repo | `github.com/thebabaklab/MetalKANO` | 4 wks | ROC-AUC ± 2 % of source-paper baseline on all 4 cell lines |
 | A1.2 | **M** | Metal-extended sanitization refactored to strategy-pattern API | ADR-002, Pillar 2 | 3 wks | Pt strategy passes the 94 % parsing-success benchmark |
-| A1.3 | **M** | Au sanitization strategy (κ¹ Au(I) linear + κ² Au(III) square-planar + NHC) | Chemistry review by the chemistry team | 3 wks | ≥ 90 % parsing on ≥ 100 manually curated Au complexes |
-| A1.4 | S | Cu sanitization strategy (Cu(I), Cu(II)) | Pillar 2 | 2 wks | ≥ 90 % parsing on ≥ 100 Cu complexes |
+| A1.3 | **M** | Au sanitization strategy (κ¹ Au(I) linear + κ² Au(III) square-planar + NHC) | Chemistry review by the chemistry team | 5–7 wks (bottom-up: SMILES corpus collection 1 wk + dative-bond rule set 1 wk + NHC handling 1 wk + edge-case curation queue 1 wk + 2 chemist-feedback turns at 1-2 wk each) | ≥ 90 % parsing on ≥ 100 manually curated Au complexes |
+| A1.4 | S | Cu sanitization strategy (Cu(I), Cu(II)) | Pillar 2 | 3–4 wks (chemistry rules + edge cases) | ≥ 90 % parsing on ≥ 100 Cu complexes |
 | A1.5 | **M** | **`pydentate` integration** upstream of sanitization | github.com/hjkgrp/pydentate | 1-2 wks | Toney coordinating-atom-count model exposed via chemoinformatic-core API |
 | A1.6 | S | MB Finder v2 alpha deployed | Pillar 4 production stack | 4 wks | API live; replicates MB Finder v1 functionality on K8s |
-| A1.7 | S | Multi-omics MoA service replays PlatinAI mechanism study | Pillar 2 Component 2.3; GSE320503 + PXD074892 | 3 wks | Re-derives COL3A1, BUB1B, PLK1 as top-5 from raw RNA-seq + proteomics |
+| A1.7 | S | Multi-omics MoA service replays PlatinAI mechanism study | Pillar 2 Component 2.3; GSE320503 + PXD074892 | 4–5 wks (bottom-up: DESeq2/MSstats pipeline 1 wk + cross-omics correlation 1 wk + KG enrichment 1-2 wk + dossier-format generation 1 wk) | Re-derives COL3A1, BUB1B, PLK1 as top-5 from raw RNA-seq + proteomics |
+| A1.8 | **M** | **Campaign-scoped model routing in inference-api** (model alias → version resolution per campaign; X-Model-Version response header) | ADR-006 + inference-api | 2 wks | Phase-2 Synthesis / Assay agents (B2.4) can pin a model version per campaign without breaking other campaigns |
 
-Phase 1 Track A: 11–12 wks Must (≈45 % of 26-wk capacity, leaving room for Track B + shared infra below).
+Phase 1 Track A: **13–17 wks Must** (revised bottom-up; this is closer to **50–65 % of 26-wk capacity** alone, leaving room for Track B + shared infra below but *less* room than the prior round-number estimate suggested).
+
+**Stop-the-line indicator (month 3):** if fewer than 60 % of M-tagged Phase-1 milestones have closed by the end of month 3, the platform engineer triggers a re-prioritisation review with the principal investigator. By default, A1.4 (Cu sanitization) descopes to Phase 2 first. The indicator is a deliberate brake on optimism: round-numbered milestone estimates are a known failure mode, and the bottom-up re-estimates above (A1.3 + A1.7) are themselves wider than the round-number versions.
 
 **Phase 1 outputs published / shipped:**
 - MB Finder v2 alpha deployed to a staging URL.

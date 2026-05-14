@@ -37,6 +37,7 @@
 | 4 | Cu sanitization strategy operational. | 2 |
 | 5 | Multi-omics MoA service replays PlatinAI mechanism study; matches manually identified targets. | 2 |
 | 5 | First agentic Design + Analysis pilot (compute-only, no wet-lab) on a synthetic objective. | 3 |
+| 4 | Campaign-scoped model routing in inference-api (model alias → version resolution per campaign; X-Model-Version response header). Unblocks Phase-2 multi-campaign Synthesis/Assay agents. | 4 |
 | 6 | MB Finder v2 alpha released for internal review; principal-investigator sign-off; internal dogfooding begins. | 4 |
 | 6 | Phase 1 retrospective + Phase 2 plan reviewed. | — |
 

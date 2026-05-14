@@ -68,6 +68,7 @@ Every artefact in this tuple is content-addressable; combined, they form a falsi
   | Tier 1 (small classifiers) and Tier 3 (AF3 / Boltz-2 batch) | **Scale-to-zero** with cold-start mitigated by a warm pool of 1 GPU | Stateless small models and batch workloads cold-start cheaply (sub-30 s). Warm pool absorbs morning rush. |
   | Tier 2 — Llama 3 70B (Supervisor orchestrator) | **Explicit choice: 24×7 OR scale-to-zero with budgeted cold-start.** Default Phase-1 = scale-to-zero with documented cold-start SLO ≤ 180 s. The 24×7 alternative is ≈ $1,500–2,150 / mo (Lambda H100 reserved vs on-demand). | A 70B AWQ-loaded weight loads in 60-180 s on H100; that latency is bounded and acceptable for non-interactive Supervisor decisions. Interactive web-UI chat traffic, if introduced, may require the 24×7 alternative. |
 - **Cold-start SLO budget.** Each tier ships with an explicit cold-start budget recorded in the SLO register (`docs/06a_slo_register.md`, Phase 1 deliverable).
+- **LLM token observability.** Grafana panel `llm_tokens_total{campaign_id, agent_id, model}` is a first-class dashboard row; the Supervisor's per-campaign token budget (per ADR-009 § Reinforcement post-training) is enforced against this metric. Per-campaign budget alert at 80 % consumption; freeze-on-burn applies (per `docs/06a_slo_register.md`). This is the metric that backs the R19 vendor LLM API price-shock circuit breaker.
 - **Model rollout:** canary deployment — 5 % of traffic routed to a new model version while production sees the prior version; automated rollback on metric regression.
 
 ### Component 4.2.1 — Inference serving stack and quantisation (the modern serving picture)
@@ -192,17 +193,26 @@ Three scenarios. A host institution may absorb some infrastructure internally (i
 
 ### Steady-state operating cost (no active DMTA campaign)
 
-| Item | Cloud-rental | Self-hosted on lab GPUs (3-yr amortised) | Notes |
-|---|---|---|---|
-| K8s control plane (managed) | 200 | 0 (lab K8s on existing hardware) | |
-| Small-model inference (Tier 1, MKANO+) | 300 | 50 | Auto-scales to zero overnight |
-| LLM inference (Tier 2, 1×H100 24×7 AWQ Llama 3 70B) | 1,800 | 1,000 | Lambda Labs ≈ $1.50/hr |
-| Structure prediction (Tier 3, AF3/Boltz-2, on-demand) | 400 | 200 | Spot capacity, batch jobs |
-| PostgreSQL managed | 300 | 50 | RDS or equivalent |
-| Object storage (10 TB) | 200 | 50 | S3 / MinIO local |
-| Observability stack | 150 | 50 | Self-hostable |
-| Frontier LLM API tokens (low-sensitivity workflows) | 200 | 200 | Routine code generation, lit search |
-| **Steady-state subtotal** | **≈ 3,550** | **≈ 1,600** | |
+Itemised line items, including HA replicas + observability ingestion + retrieval re-embedding + data-licence subscriptions that earlier drafts of this cost envelope omitted. Numbers are upper-bound monthly cloud-rental costs unless otherwise noted; the self-hosted column amortises 3-year on-prem capex.
+
+| Item | Cloud-rental ($/mo) | Self-hosted ($/mo, 3-yr amort.) | Notes |
+| --- | --- | --- | --- |
+| K8s control plane (managed) | 200 | 0 | Lab K8s on existing hardware. |
+| Tier 1 small-model inference (MKANO+, geometry heads) | 300 | 50 | KServe scale-to-zero with warm pool. |
+| Tier 2 LLM inference — Llama 3 70B AWQ | **2,150** (on-demand H100) **OR** 1,500 (reserved) **OR** 0 (scale-to-zero with cold-start SLO ≤180 s) | 1,000 | On-demand Lambda H100 ≈ $2.99/hr × 720 h. Reserved-capacity rate ≈ $1.50/hr × 720 h. Scale-to-zero appropriate only for non-interactive Supervisor traffic. |
+| Tier 3 structure prediction (AF3 / Boltz-2 on-demand) | 400 | 200 | Spot capacity, batch queue. |
+| **operational-pg managed (HA, primary + 1 replica)** | 450 | 100 | Per ADR-002 split; HA replica is non-negotiable for the user-facing data plane. |
+| **mlops-pg managed (HA, primary + 1 replica)** | 350 | 80 | Per ADR-002 split. |
+| Neo4j Community Edition | 100 | 40 | Self-host on a small VM. |
+| Object storage (10 TB) | 200 | 50 | S3 / MinIO local. |
+| **Object storage egress** | 100–500 | 0 | $0.09/GB on AWS; bursts on open-data release events. |
+| **Observability ingestion (Loki / Prometheus / Tempo)** | 200 | 80 | 50–200 GB/mo logs + traces; cheap on object-backed Loki but the indexer / querier nodes cost real compute. |
+| **Retrieval re-embedding (BGE-M3 weekly + ColPali if/when enabled)** | 60–150 | 30 | Compute for weekly delta re-embed; one-time spikes ($2–5 K) on model upgrades. |
+| Semantic cache (Redis managed) | 100 | 20 | GPTCache backend. |
+| Frontier LLM API tokens (low-sensitivity workflows) | 200 | 200 | Routine code generation, lit search; subject to R19 vendor price shock. |
+| **Cambridge Structural Database (CSD) academic-site licence** | **350** (≈ £3–5 K/yr) | 350 | Required for Pillar 1 / 2 sourcing — was omitted from earlier cost drafts. |
+| **Reaxys / SciFinder (if used)** | 800–2,500 | 800–2,500 | Optional; if the host lab subscribes for chemistry-team workflows. |
+| **Steady-state subtotal (Phase-1 mid-range)** | **≈ $4,800–5,500 / mo** | **≈ $2,000–2,500 / mo** | Mid-range = reserved H100, mid-band egress, CSD included, no Reaxys. |
 
 ### Active-campaign cost (one DMTA campaign in flight)
 
@@ -215,8 +225,9 @@ Three scenarios. A host institution may absorb some infrastructure internally (i
 
 ### Annual total
 
-- **Cloud-rental, baseline + 6 campaigns/year:** ≈ US $80–110 K.
-- **Self-hosted on lab GPUs (assumes 1×H100 + 2×A100 capex amortised over 3 years at ≈ US $20 K/year):** ≈ US $40–55 K including capex amortisation.
+- **Cloud-rental, baseline + 6 campaigns/year (revised with HA + observability ingest + data subs + on-demand H100):** ≈ US **$95–135 K**.
+- **Self-hosted on lab GPUs (assumes 1×H100 + 2×A100 capex amortised over 3 years at ≈ US $20 K/year + CSD subscription + observability):** ≈ US **$50–70 K** including capex amortisation.
+- **Cost variance budget.** Monthly variance ≥ 20 % triggers a quarterly cost-envelope review; the cost number is treated as a moving target tied to R19 (vendor LLM API price shock) and to actual usage rather than a point estimate. The platform engineer publishes an actual-vs-envelope dashboard alongside the SLO dashboards.
 
 The self-hosted scenario is competitive once the host lab runs more than ≈4 campaigns/year *or* the orchestrator's token volume crosses ≈25M tokens/month — both of which are reached during Phase 2 of the roadmap. The crossover argument is the load-bearing rationale for Pillar 3's data-sovereignty Component 3.2.1.
 
