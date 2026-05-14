@@ -51,15 +51,14 @@ Each ADR captures one durable architectural commitment. Standard sections: Statu
 
 | Path | Description |
 | --- | --- |
-| [`slides/presentation.md`](slides/presentation.md) | 22-slide Marp markdown deck — renders cleanly as github markdown and as a styled PDF via Marp CLI. |
-| [`slides/marp-theme.css`](slides/marp-theme.css) | Arctic Frost theme — steel blue + ice blue + silver + crisp white palette, DejaVu Sans typography. |
+| [`slides/presentation.md`](slides/presentation.md) | 22-slide Marp markdown deck — pure markdown, reads cleanly on GitHub; also renders to PDF / HTML via Marp CLI. |
 
 To render the PDF:
 
 ```bash
 npm i -g @marp-team/marp-cli
 cd slides
-marp --theme-set marp-theme.css presentation.md -o presentation.pdf
+marp presentation.md -o presentation.pdf
 ```
 
 ---

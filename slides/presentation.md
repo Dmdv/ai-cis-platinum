@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: babak-lab
+theme: default
 size: 16:9
 paginate: true
 header: 'MB Finder v2 — research architecture'
@@ -8,16 +8,14 @@ footer: 'Rusanov et al., 2026 · ChemRxiv DOI 10.26434/chemrxiv-2025-pp32k/v2'
 ---
 
 <!--
-Marp slide deck — MB Finder v2: A Multi-Metal AI-Driven Metallodrug Discovery System.
-Theme: see ./marp-theme.css.
+MB Finder v2 — A Multi-Metal AI-Driven Metallodrug Discovery System.
 
-To render to PDF:
+This file is pure markdown — read it directly on GitHub. Marp directives
+(`<!-- _class: lead -->` etc.) are HTML comments that GitHub ignores;
+Marp CLI uses them if you want to render the file to PDF / HTML:
+
   npm i -g @marp-team/marp-cli
-  cd slides
-  marp --theme-set marp-theme.css presentation.md -o presentation.pdf
-
-This file is also readable directly on GitHub — every slide is pure
-markdown so the github blob view is the intended audience for browsing.
+  marp presentation.md -o presentation.pdf
 -->
 
 <!-- _class: lead -->
@@ -332,7 +330,7 @@ Full risk register: `docs/09_risks_and_mitigations.md`.
 ai-cis-platinum/
 ├── README.md
 ├── docs/        13 markdown files, ~40 pages — the written proposal
-├── slides/      this deck + marp-theme.css
+├── slides/      this deck
 ├── repo/        skeleton service tree + ADRs (no business logic)
 └── diagrams/    Mermaid sources for all architecture diagrams
 ```
